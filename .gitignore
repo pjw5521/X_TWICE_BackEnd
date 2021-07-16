@@ -1,0 +1,10 @@
+.idea/
+.vscode/
+# .env
+# .env.production
+app.yaml
+app.*.yaml
+build/
+node_modules/
+tmp/
+temp/

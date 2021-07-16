@@ -1,0 +1,29 @@
+{
+  "name": "x-twice-backend",
+  "version": "1.0.0",
+  "description": "Example how to use Koa and TypeORM with TypeScript.",
+  "devDependencies": {
+    "@types/koa": "^2.13.3",
+    "@types/koa-bodyparser": "^4.3.1",
+    "@types/koa-router": "^7.4.2",
+    "@types/node": "^15.14.0",
+    "typescript": "^4.3.5",
+    "ts-node": "^10.0.0",
+    "jest": "^27.0.6",
+    "ts-jest": "^25.2.1",
+    "ts-node-dev": "^1.1.8"
+  },
+  "dependencies": {
+    "koa": "^2.13.1",
+    "koa-bodyparser": "^4.3.0",
+    "koa-router": "^10.0.0",
+    "dotenv": "^10.0.0",
+    "mysql": "^2.18.1",
+    "typeorm": "^0.2.34"
+  },
+  "scripts": {
+    "start": "node ./build/index.js",
+    "dev": "ts-node-dev --respawn ./src/index.ts",
+    "build": "tsc"
+  }
+}
