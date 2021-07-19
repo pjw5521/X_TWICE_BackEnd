@@ -1,3 +1,4 @@
+import { Certificate } from "crypto";
 import { Context } from "koa";
 import { getCustomRepository } from "typeorm";
 import { UserRepository } from "../repositories/UserRepository";
@@ -13,6 +14,15 @@ export class UserController {
         ctx.status = 200
         ctx.body = {
             data: users
+        }
+    }
+
+    static async getOne(ctx: Context){
+        const user = await getCustomRepository(UserRepository).getOne("jiwon");
+
+        ctx.status = 200
+        ctx.body = {
+            data: user
         }
     }
 

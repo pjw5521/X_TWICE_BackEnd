@@ -21,7 +21,7 @@ export default function getDatabase(currentDir: string, dirExt: string) {
             password: process.env.DB_PASSWORD, // 접속 비밀번호
             database: process.env.DB_DATABASE, // 데이터베이스명
             charset: process.env.DB_CHARSET, // 문자열
-            synchronize: false, // 동기화 - 절대 true로 사용하지 마시오!!
+            synchronize: true, // 동기화 - 절대 true로 사용하지 마시오!!
             // DB table 모두 생성 후 false로 바꾸기 
             logging: 'all', // Query 로그 종류
             connectTimeout: 3000, // Connection 타임아웃

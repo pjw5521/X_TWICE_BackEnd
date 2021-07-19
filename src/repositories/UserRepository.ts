@@ -1,11 +1,21 @@
 import { EntityRepository, Repository } from "typeorm";
+import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 import { User } from "../entities/User";
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
 
     async getOne(id: string) {
+        const user = 'user';
+
+        const params: QueryDeepPartialEntity<User> = {};
+        params.user_account = id;
         
+        const qb = this.createQueryBuilder(user)
+            .where(`${user}.user_account = :user_account`)
+            .setParameters(params);
+
+        return await qb.getOne();
     }
 
     async getUserListByName(name: string) {

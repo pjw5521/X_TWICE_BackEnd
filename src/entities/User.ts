@@ -1,5 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { DataType } from '../types/database';
+import { History } from './History';
+import { Picture } from './Picture';
 
 @Entity('Users')
 export class User {
@@ -15,4 +17,10 @@ export class User {
     length: 64,
   })
   user_account: string;
+  
+  @OneToMany(() => History, history => history.history_num)
+  history: History[];
+
+  @OneToMany(() => Picture, picture => picture.token_id)
+  picture: Picture[];
 }

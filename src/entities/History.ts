@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column,ManyToOne } from 'typeorm';
 import { DataType } from '../types/database';
+import { User } from './User';
 
 @Entity('Histories')
 export class History {
@@ -16,11 +17,6 @@ export class History {
   })
   date: Date;
 
-  @Column({
-    type: DataType.int,
-    name: "user_num1",
-  })
-  user_num1: number;
 
   @Column({
     type: DataType.int,
@@ -48,4 +44,6 @@ export class History {
   })
   picture_price: number;
 
+  @ManyToOne((type) => User, user_num1 => user_num1.user_num)
+  user_num1: User;
 }
