@@ -21,8 +21,7 @@ export class UserController {
             // return ctx.throw(404, { message: "NICE", isDelete: true });
             throw new Error('nice')
         }
-
-        // ctx.status = 200
+        
         ctx.body = {
             data: users
         }
