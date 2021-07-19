@@ -1,14 +1,13 @@
 import "reflect-metadata";
 import { createConnection } from "typeorm";
 import Koa from "koa";
-import bodyParser from "koa-bodyparser";
-import * as dotenv from 'dotenv';
-import router from "./routers";
 import getDatabase from "./configs/database";
-import handleError from "./middlewares/ErrorHandler";
+import {  useKoaServer } from "routing-controllers";
+import { env } from "./env";
+import { CustomErrorHandler/* , handleError */ } from "./middlewares/ErrorHandler";
 
 
-dotenv.config();
+// dotenv.config();
 
 const bootstrap = async () => {
     try {
@@ -16,25 +15,30 @@ const bootstrap = async () => {
 
         const currentDir = __dirname; // 현재 디렉터리 경로
 
-        const IS_PRODUCTION = process.env.NODE_ENV == "production"; // 운영 환경 여부
-        const IS_TEST = process.env.NODE_ENV == "test"; // 테스트 환경 여부
-        const dirExt = IS_PRODUCTION || IS_TEST ? 'js' : 'ts';
+        const isProduction = env.isPRODUCTION; // 운영 환경 여부
+        const isTest = env.isTEST; // 테스트 환경 여부
+        const dirExt = isProduction || isTest ? 'js' : 'ts';
 
         const { connectionOptions } = getDatabase(currentDir, dirExt);
+        await createConnection(connectionOptions[0]); 
         // console.log(connectionOptions);
 
-        await createConnection(connectionOptions[0]); 
+        
         console.log('Success connected to Database');
 
-        app.use(bodyParser())
-        app.use(async (ctx, next) => await handleError(ctx, next));
+        useKoaServer(app, {
+            // cors: true,
+            routePrefix: env.app.apiPrefix,
+            controllers: [`${currentDir}/controllers/**/*.${dirExt}`],
+            middlewares: [CustomErrorHandler],
+            defaultErrorHandler: false
+        });
 
-        
-        app.use(router.routes())
-            .use(router.allowedMethods());
+        const PORT_NUMBER = env.app.portNumber;
 
-        const PORT_NUMBER = process.env.PORT || 4000;
-        app.listen(PORT_NUMBER as number, '0.0.0.0', () => console.log(`Server running on port ${PORT_NUMBER}`));
+        // koaApp.use(async (ctx, next) => await handleError(ctx, next))
+        // koaApp.listen(PORT_NUMBER, '0.0.0.0', () => console.log(`Server running on port ${PORT_NUMBER}`));
+        app.listen(PORT_NUMBER, '0.0.0.0', () => console.log(`Server running on port ${PORT_NUMBER}`));
     } catch (err) {
         console.log(JSON.stringify(err, null, 2))
         process.exit(1);
