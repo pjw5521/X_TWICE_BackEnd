@@ -1,9 +1,17 @@
-import { EntityRepository, Repository } from "typeorm";
+import { DeepPartial, EntityRepository, Repository } from "typeorm";
 import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 import { User } from "../entities/User";
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
+
+    async insertWithOptions(newValue: User) {
+        return await this.save(newValue, { transaction: false, reload: false });
+    }
+
+    async updateWithOptions(updateValue: User) {
+        return await this.save(updateValue, { transaction: false, reload: false })
+    }
 
     async getOne(id: string) {
         const user = 'user';

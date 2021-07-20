@@ -1,6 +1,7 @@
 import { Response } from "koa";
-import { Get, HttpCode, JsonController, Param, Res } from "routing-controllers";
+import { Body, Get, HttpCode, JsonController, Param, Post, Put, Res } from "routing-controllers";
 import { getCustomRepository } from "typeorm";
+import { User } from "../entities/User";
 import { UserRepository } from "../repositories/UserRepository";
 
 @JsonController("/users")
@@ -43,5 +44,36 @@ export class UserController {
 
         return ctx;
     }
+
+    @HttpCode(200)
+    @Post()
+    async insert(@Body() user: User, @Res() { ctx }: Response) {
+        const isSuccess = await this.userRepo.insertWithOptions(user);
+
+        // ctx.status = 200
+        ctx.body = {
+            data: isSuccess
+        }
+
+        return ctx;
+    }
+
+    @HttpCode(200)
+    @Put()
+    async update(@Body() user: User, @Res() { ctx }: Response) {
+        // console.log(JSON.stringify(user, null, 2));
+        const updatedUser = await this.userRepo.updateWithOptions(user);
+        
+        // const isSuccess = !!updatedUser?.user_num;
+
+        ctx.body = {
+            data: updatedUser
+        }
+
+        return ctx;
+    }
+
+
+
 
 }
