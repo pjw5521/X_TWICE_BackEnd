@@ -19,12 +19,10 @@ export class UserController {
         console.log(users);
         
         if (users.length > 0) {
-            // ctx.throw(404, { message: "NICE", isDelete: true });
             // return ctx.throw(404, { message: "NICE", isDelete: true });
             throw new Error('nice')
         }
-
-        // ctx.status = 200
+        
         ctx.body = {
             data: users
         }
