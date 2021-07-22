@@ -31,7 +31,8 @@ const bootstrap = async () => {
             routePrefix: env.app.apiPrefix,
             controllers: [`${currentDir}/controllers/**/*.${dirExt}`],
             middlewares: [CustomErrorHandler],
-            defaultErrorHandler: false
+            defaultErrorHandler: false,
+            validation: false
         });
 
         const PORT_NUMBER = env.app.portNumber;
