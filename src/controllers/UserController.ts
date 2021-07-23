@@ -1,7 +1,7 @@
 import { Response } from "koa";
 import { Body, Get, HttpCode, JsonController, Param, Post, Put, Res } from "routing-controllers";
 import { getCustomRepository } from "typeorm";
-import { User } from "../entities/User";
+import { NotFoundError } from "../error";
 import { UserInsertInput, UserUpdateInput } from "../models/UserInput";
 import { UserRepository } from "../repositories/UserRepository";
 
@@ -13,14 +13,13 @@ export class UserController {
         this.userRepo = getCustomRepository(UserRepository);
     }
     
-    //@HttpCode(200)
-    //@Get()
+    @HttpCode(200)
+    @Get()
     async getUserListByName (@Res() { ctx }: Response) {
         const users = await this.userRepo.getUserListByName("ni");
-        console.log(users);
         
-        if (users.length > 0) {
-            throw new Error('nice')
+        if (users.length == 0) {
+            throw new NotFoundError("요청하신 결과가 없습니다.")
         }
         
         ctx.body = {
@@ -58,8 +57,6 @@ export class UserController {
     @Put()
     async update(@Body() user: UserUpdateInput, @Res() { ctx }: Response) {
         const updatedUser = await this.userRepo.updateWithOptions(user);
-
-        // const isSuccess = !!updatedUser?.user_num;
 
         ctx.body = {
             data: updatedUser

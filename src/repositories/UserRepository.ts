@@ -1,7 +1,8 @@
 import { validate } from "class-validator";
-import { DeepPartial, EntityRepository, Repository } from "typeorm";
+import { EntityRepository, Repository } from "typeorm";
 import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 import { User } from "../entities/User";
+import { BadRequestError } from "../error";
 import { UserInsertInput, UserUpdateInput } from "../models/UserInput";
 
 @EntityRepository(User)
@@ -11,8 +12,7 @@ export class UserRepository extends Repository<User> {
         const errors = await validate(newValue);
 
         if (errors.length > 0) {
-            // console.log("errors")
-            throw new Error('')
+            throw new BadRequestError('잘못된 요청입니다')
         }
 
         return await this.save(newValue, { transaction: false, reload: false });
@@ -21,10 +21,8 @@ export class UserRepository extends Repository<User> {
     async updateWithOptions(updateValue: UserUpdateInput) {
         const errors = await validate(updateValue);
 
-        // console.log(errors.toString());
-
         if (errors.length > 0) {
-            throw new Error('')
+            throw new BadRequestError('잘못된 요청입니다')
         }
 
         return await this.save(updateValue, { transaction: false, reload: false })
@@ -43,15 +41,15 @@ export class UserRepository extends Repository<User> {
         return await qb.getOne();
     }
 
-    async getUserListByName(name: string) {
+    async getUserListByName(user_account: string) {
         const userAlias = 'user';
 
         const qb = this.createQueryBuilder(userAlias)
-            .where(`${userAlias}.name like :name`)
+            .where(`${userAlias}.user_account like :user_account`)
             .setParameters({
-                name: `%${name}%`
+                user_account: `%${user_account}%`
             })
-            .orderBy(`${userAlias}.num`, 'DESC')
+            .orderBy(`${userAlias}.user_account`, 'DESC')
             .limit(5);
         
         return await qb.getMany();

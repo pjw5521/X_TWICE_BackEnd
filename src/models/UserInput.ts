@@ -1,4 +1,4 @@
-import { IsInt, IsOptional, IsString, Length, ValidateIf } from "class-validator";
+import { IsInt, IsString, Length, ValidateIf } from "class-validator";
 import { User } from "../entities/User";
 
 export class UserInsertInput implements Partial<User> {
@@ -20,6 +20,6 @@ export class UserUpdateInput implements Partial<User> {
     @ValidateIf((_, value) => value !== undefined)
     @IsString()
     @Length(5, 64)
-    user_account?: string;  
+    user_account?: string;
 
 }
