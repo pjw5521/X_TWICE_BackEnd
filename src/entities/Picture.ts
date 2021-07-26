@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, PrimaryColumn } from 'typeorm';
 import { DataType } from '../types/database';
 import { Object_list } from './Object_list';
 import { Picture_objects } from './Picture_objects';
@@ -7,11 +7,12 @@ import { User } from './User';
 @Entity('Pictures')
 export class Picture {
     
-  @PrimaryGeneratedColumn({
-    type: DataType.int,
+  @PrimaryColumn({
+    type: DataType.varchar,
     name: "token_id",
+    length: 100
   })
-  token_id: number;
+  token_id: string;
 
   @Column({
     type: DataType.varchar,
@@ -36,6 +37,14 @@ export class Picture {
 
   @Column({
     type: DataType.varchar,
+    name: "picture_state",
+    length: 45,
+    default: "보유토큰" 
+  })
+  picture_state: string;
+
+  @Column({
+    type: DataType.varchar,
     name: "picture_info",
     length: 300,
   })
@@ -44,6 +53,7 @@ export class Picture {
   @Column({
     type: DataType.int,
     name: "picture_price",
+    default: 0
   })
   picture_price: number;
 
