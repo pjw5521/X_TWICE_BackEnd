@@ -1,7 +1,8 @@
 export enum DataType {
     int = "int",
     varchar = "varchar",
-    date = "date"
+    date = "date",
+    boolean="boolean"
 }
 
 /* export enum LenthType {

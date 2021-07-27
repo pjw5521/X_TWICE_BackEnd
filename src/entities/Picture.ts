@@ -38,8 +38,8 @@ export class Picture {
   @Column({
     type: DataType.varchar,
     name: "picture_state",
-    length: 45,
-    default: "보유토큰" 
+    default: "N",
+    length: 10
   })
   picture_state: string;
 

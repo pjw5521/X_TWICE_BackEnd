@@ -1,9 +1,12 @@
 import { Response } from "koa";
-import { Body, Get, HttpCode, JsonController, Param, Post, Put, Res } from "routing-controllers";
+import { Body, Get, HttpCode, JsonController, Param, Post, Put, QueryParams, Res } from "routing-controllers";
 import { getCustomRepository, LockNotSupportedOnGivenDriverError } from "typeorm";
-import { NotFoundError } from "../error";
+import { BadRequestError, NotFoundError } from "../error";
 import { Picture } from "../entities/Picture";
 import { PictureRepository } from "../repositories/PictureRepository";
+import { Query } from "typeorm/driver/Query";
+import { GetPicturesQuery } from "../models/UserQuery";
+import { PictureSaleInput } from "../models/PictureInput";
 
 @JsonController("/pictures")
 export class PictureController {
@@ -16,7 +19,7 @@ export class PictureController {
     // 사진 등록하기
     @HttpCode(200)
     @Post()
-    async register(@Body() picture: Picture, @Res() { ctx }: Response) {
+    async save(@Body() picture: Picture, @Res() { ctx }: Response) {
         const isSuccess = await this.pictureRepo.saveWithOptions(picture);
 
         ctx.body = {
@@ -28,7 +31,7 @@ export class PictureController {
 
     // 사진 정보 수정하기
     @HttpCode(200)
-    @Put("/update")
+    @Put()
     async update(@Body() picture: Picture, @Res() { ctx }: Response) { 
         const isSuccess  = await this.pictureRepo.saveWithOptions(picture);
 
@@ -42,8 +45,8 @@ export class PictureController {
     // 판매 토큰으로 등록하기 
     @HttpCode(200)
     @Put("/sale")
-    async registeSale(@Body() price: number, token_id: string /* Input 파일 하나 만들기 */, @Res() { ctx }: Response) { 
-        const isSuccess  = await this.pictureRepo.registerSale(price, token_id);
+    async registerSale(@Body() picture: PictureSaleInput, @Res() { ctx }: Response) { 
+        const isSuccess  = await this.pictureRepo.registerSale(picture);
 
         ctx.body = {
             data: isSuccess 
@@ -54,8 +57,8 @@ export class PictureController {
 
     // 판매 취소(보유 중인 상태로 변경) 
     @HttpCode(200)
-    @Put("/state")
-    async cancleSale(@Body() token_id: string, @Res() { ctx }: Response) { 
+    @Put("/cancle/:token_id")
+    async cancleSale(@Param('token_id') token_id: string, @Res() { ctx }: Response) { 
         const isSuccess  = await this.pictureRepo.cancleSale(token_id);
 
         ctx.body = {
@@ -68,15 +71,15 @@ export class PictureController {
     // 토큰정보 확인하기 => QueryString 알려주기 
     @HttpCode(200)
     @Get("/:user_num")
-    async getList(@Param('user_num') user_num: number, state: string, @Res() { ctx }: Response) {
-        const picture = await this.pictureRepo.getList(user_num, state);
+    async getMyList(@Param('user_num') user_num: number, @QueryParams() query: GetPicturesQuery, @Res() { ctx }: Response) {
+        const pictures = await this.pictureRepo.getMyList(user_num, query);
 
-        if (picture.length == 0) {
+        if (pictures.length == 0) {
             throw new NotFoundError("요청하신 결과가 없습니다.")
         }
 
         ctx.body = {
-            data: picture
+            data: pictures
         }
 
         return ctx;
@@ -84,16 +87,20 @@ export class PictureController {
 
     // 키워드별 사진 검색하기
     @HttpCode(200)
-    @Get()
-    async search(keyword: string, @Res() { ctx }: Response) {
-        const search = await this.pictureRepo.search(keyword);
+    @Get("/keywords/:keyword")
+    async getListByKeywords(@Param('keyword') keyword: string, @Res() { ctx }: Response) {
+        if (!keyword) {
+            throw new BadRequestError('잘못된 요청입니다.');
+        }
 
-        if (search.length == 0) {
+        const pictures = await this.pictureRepo.getListByKeywords(keyword);
+
+        if (pictures.length == 0) {
             throw new NotFoundError("요청하신 결과가 없습니다.")
         }
 
         ctx.body = {
-            data: search
+            data: pictures
         }
 
         return ctx;
