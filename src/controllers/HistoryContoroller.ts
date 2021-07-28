@@ -28,9 +28,9 @@ export class HisyoryController {
 
      // 거래내역 확인하기 
      @HttpCode(200)
-     @Get("/:user_num")
-     async getToken(@Param('user_num') user_num: number, @Res() { ctx }: Response) {
-        const history = await this.historyRepo.getHistory(user_num);
+     @Get("/:user_num1")
+     async getHistory(@Param('user_num1') user_num1: number, @Res() { ctx }: Response) {
+        const history = await this.historyRepo.getHistory(user_num1);
 
         if (history.length == 0) {
             throw new NotFoundError("요청하신 결과가 없습니다.")
