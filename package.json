@@ -26,8 +26,9 @@
     "class-validator": "^0.12.2"
   },
   "scripts": {
-    "start": "node ./build/index.js",
+    "start": "pm2 start ./build/pm2.js",
     "dev": "ts-node-dev --respawn ./src/index.ts",
-    "build": "tsc"
+    "build:windows": "tsc",
+    "build:linux": "rm -r ./build && tsc"
   }
 }
