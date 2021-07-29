@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, PrimaryColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, PrimaryColumn, JoinColumn } from 'typeorm';
 import { DataType } from '../types/database';
 import { Object_list } from './Object_list';
 import { Picture_objects } from './Picture_objects';
@@ -65,6 +65,7 @@ export class Picture {
   picture_count: number;
 
   @ManyToOne(() => User, user_num => user_num.user_num)
+  @JoinColumn({ name: "user_num" })
   user_num: User;
 
   @OneToMany(() => Picture_objects, picture_object => picture_object.picture_object_num)

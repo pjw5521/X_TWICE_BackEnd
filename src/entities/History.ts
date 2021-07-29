@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column,ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column,ManyToOne, JoinColumn } from 'typeorm';
 import { DataType } from '../types/database';
 import { User } from './User';
 
@@ -45,5 +45,6 @@ export class History {
   picture_price: number;
 
   @ManyToOne((type) => User, user_num1 => user_num1.user_num)
+  @JoinColumn({ name: "user_num" })
   user_num1: User;
 }

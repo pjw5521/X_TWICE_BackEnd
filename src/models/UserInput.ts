@@ -29,7 +29,7 @@ export class UserUpdateInput implements Partial<User> {
     @ValidateIf((_, value) => value !== undefined)
     @IsString()
     @Length(5, 64)
-    user_account?: string;
+    user_id?: string;
 
 }
 

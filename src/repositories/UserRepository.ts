@@ -68,15 +68,15 @@ export class UserRepository extends Repository<User> {
         return await qb.getOne();
     }
 
-    async getUserListByName(user_account: string) {
+    async getUserListByName(user_id: string) {
         const userAlias = 'user';
 
         const qb = this.createQueryBuilder(userAlias)
-            .where(`${userAlias}.user_account like :user_account`)
+            .where(`${userAlias}.user_id like :user_id`)
             .setParameters({
-                user_account: `%${user_account}%`
+                user_id: `%${user_id}%`
             })
-            .orderBy(`${userAlias}.user_account`, 'DESC')
+            .orderBy(`${userAlias}.user_id`, 'DESC')
             .limit(5);
         
         return await qb.getMany();

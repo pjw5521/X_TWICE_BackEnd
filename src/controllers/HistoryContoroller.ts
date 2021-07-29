@@ -26,7 +26,7 @@ export class HisyoryController {
         return ctx;
     }
 
-     // 거래내역 확인하기 
+     // 거래내역 확인하기 조인
      @HttpCode(200)
      @Get("/:user_num1")
      async getHistory(@Param('user_num1') user_num1: number, @Res() { ctx }: Response) {

@@ -51,7 +51,7 @@ export class PictureRepository extends Repository<Picture> {
 
         const { state, first, last } = query;
 
-        const qb = this.createQueryBuilder(alias) 
+        const qb = this.createQueryBuilder(alias)
             .where(`${alias}.user_num = :user_num`)
             .andWhere(`${alias}.picture_state = :state`)
             .setParameters({
