@@ -1,5 +1,6 @@
-import { IsIn, IsInt, IsString, Length, ValidateIf } from "class-validator";
+import { IsInt, IsString, IsOptional } from "class-validator";
 import { Picture } from "../entities/Picture";
+import { GetPagnation } from "./PageQuery";
 
 export class PictureSaleInput implements Partial<Picture> {
 
@@ -11,15 +12,10 @@ export class PictureSaleInput implements Partial<Picture> {
 
 }
 
-export class MyListInput implements Partial<Picture> {
+export class ViewBycategoryQuery extends GetPagnation{
 
+    @IsOptional()
     @IsString()
-    token_id: string;
-
-    @IsInt()
-    first: number;
-
-    @IsInt()
-    last: number;
-
+    category?: string = "나무";
+    
 }

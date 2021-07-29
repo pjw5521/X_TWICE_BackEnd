@@ -4,7 +4,8 @@ import { getCustomRepository } from "typeorm";
 import { BadRequestError, NotFoundError } from "../error";
 import { Picture } from "../entities/Picture";
 import { PictureRepository } from "../repositories/PictureRepository";
-import { GetMyListQuery, GetPagnation, GetPicturesQuery } from "../models/UserQuery";
+import { GetMyListQuery } from "../models/UserQuery";
+import { GetPagnation } from "../models/PageQuery";
 import { PictureSaleInput } from "../models/PictureInput";
 
 @JsonController("/pictures")

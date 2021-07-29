@@ -57,6 +57,13 @@ export class Picture {
   })
   picture_price: number;
 
+  @Column({
+    type: DataType.int,
+    name: "picture_count",
+    default: 0
+  })
+  picture_count: number;
+
   @ManyToOne(() => User, user_num => user_num.user_num)
   user_num: User;
 
