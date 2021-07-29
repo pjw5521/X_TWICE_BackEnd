@@ -60,7 +60,7 @@ export class UserController {
 
     @HttpCode(200)
     @Post("/login")
-    async login(@CurrentUser() user: TokenPayload, @Res() { ctx }: Response){
+    async login(@Res() { ctx }: Response){
         const signToken = await this.tokenUtil.signToken();
 
         ctx.body = {
