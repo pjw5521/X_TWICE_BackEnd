@@ -3,12 +3,11 @@ import { DeepPartial, EntityRepository, Repository } from "typeorm";
 import { Picture } from "../entities/Picture";
 import { BadRequestError } from "../error";
 import { PictureSaleInput } from "../models/PictureInput";
-import { GetPicturesQuery } from "../models/UserQuery";
+import { GetListByKeywordsQuery, GetMyListQuery } from "../models/UserQuery";
 
 @EntityRepository(Picture)
 export class PictureRepository extends Repository<Picture> {
     
-    // error 처리
     async saveWithOptions(newValue: Picture){
         return await this.save(newValue,{ transaction: false, reload: false });
     }
@@ -40,7 +39,7 @@ export class PictureRepository extends Repository<Picture> {
         return await this.save(picture, { transaction: false, reload: false })
     }
 
-    async getMyList(user_num: number, query: GetPicturesQuery) {
+    async getMyList(user_num: number, query: GetMyListQuery){
         const errors = await validate(query);
 
         if (errors.length > 0) {
@@ -49,7 +48,7 @@ export class PictureRepository extends Repository<Picture> {
 
         const alias = "picture" 
 
-        const { state } = query;
+        const { state, first, last } = query;
 
         const qb = this.createQueryBuilder(alias) 
             .where(`${alias}.user_num = :user_num`)
@@ -58,13 +57,17 @@ export class PictureRepository extends Repository<Picture> {
                 user_num,
                 state
             }) 
+            .skip(first)
+            .take(last)
 
         return await qb.getMany();
     }
 
-    // 사진 검색하기 (사진 이름이랑 제목만 ?  )
-    async getListByKeywords(keyword: string) {
+    // 사진 검색하기
+    async getListByKeywords(keyword: string, query: GetListByKeywordsQuery) {
         const alias = "picture"
+        
+        const { first, last } = query;
         
         const qb = this.createQueryBuilder(alias)
             .select([`${alias}.picture_url`, `${alias}.picture_title`])
@@ -74,8 +77,41 @@ export class PictureRepository extends Repository<Picture> {
             .setParameters({
                 keyword: `%${keyword}%`
             })
+            .skip(first)
+            .take(last)
 
         return await qb.getMany();
     }
+
+    async viewByPrice() {
+        const alias = "picture"
+        
+        const qb = this.createQueryBuilder(alias)
+            .select([`${alias}.picture_url`, `${alias}.picture_title`])
+            .orderBy(`${alias}.price`, "ASC")
+
+        return await qb.getMany();
+    }
+
+    async viewByCategory() {
+        const alias = "picture"
+        
+        const qb = this.createQueryBuilder(alias)
+            .select([`${alias}.picture_url`, `${alias}.picture_title`])
+            .groupBy(`${alias}.picture_category`)
+            
+        return await qb.getMany();
+    }
+
+    async viewByPopular() {
+        const alias = "picture"
+        
+        const qb = this.createQueryBuilder(alias)
+            .select([`${alias}.picture_url`, `${alias}.picture_title`])
+            .groupBy(`${alias}.picture_category`)
+            
+        return await qb.getMany();
+    }
+
 
 }

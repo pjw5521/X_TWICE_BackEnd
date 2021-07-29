@@ -4,7 +4,3 @@ export enum DataType {
     date = "date",
     boolean="boolean"
 }
-
-/* export enum LenthType {
-    thrity = 30
-} */

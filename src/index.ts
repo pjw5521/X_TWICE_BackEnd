@@ -33,7 +33,7 @@ const bootstrap = async () => {
         const tokenUtil = new TokenUtil();
 
         useKoaServer(app, {
-            // cors: true,
+            cors: true,
             routePrefix: env.app.apiPrefix,
             controllers: [`${currentDir}/controllers/**/*.${dirExt}`],
             middlewares: [CustomErrorHandler],

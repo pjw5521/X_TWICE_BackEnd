@@ -10,3 +10,16 @@ export class PictureSaleInput implements Partial<Picture> {
     picture_price: number;  
 
 }
+
+export class MyListInput implements Partial<Picture> {
+
+    @IsString()
+    token_id: string;
+
+    @IsInt()
+    first: number;
+
+    @IsInt()
+    last: number;
+
+}

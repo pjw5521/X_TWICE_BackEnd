@@ -1,11 +1,10 @@
 import { Response } from "koa";
 import { Body, Get, HttpCode, JsonController, Param, Post, Put, QueryParams, Res } from "routing-controllers";
-import { getCustomRepository, LockNotSupportedOnGivenDriverError } from "typeorm";
+import { getCustomRepository } from "typeorm";
 import { BadRequestError, NotFoundError } from "../error";
 import { Picture } from "../entities/Picture";
 import { PictureRepository } from "../repositories/PictureRepository";
-import { Query } from "typeorm/driver/Query";
-import { GetPicturesQuery } from "../models/UserQuery";
+import { GetListByKeywordsQuery, GetMyListQuery, GetPicturesQuery } from "../models/UserQuery";
 import { PictureSaleInput } from "../models/PictureInput";
 
 @JsonController("/pictures")
@@ -68,10 +67,10 @@ export class PictureController {
         return ctx;
     }
 
-    // 토큰정보 확인하기 => QueryString 알려주기 
+    // 토큰정보 확인하기 
     @HttpCode(200)
     @Get("/:user_num")
-    async getMyList(@Param('user_num') user_num: number, @QueryParams() query: GetPicturesQuery, @Res() { ctx }: Response) {
+    async getMyList(@Param('user_num') user_num: number, @QueryParams() query: GetMyListQuery, @Res() { ctx }: Response) {
         const pictures = await this.pictureRepo.getMyList(user_num, query);
 
         if (pictures.length == 0) {
@@ -88,12 +87,12 @@ export class PictureController {
     // 키워드별 사진 검색하기
     @HttpCode(200)
     @Get("/keywords/:keyword")
-    async getListByKeywords(@Param('keyword') keyword: string, @Res() { ctx }: Response) {
+    async getListByKeywords(@Param('keyword') keyword: string, @QueryParams() query: GetListByKeywordsQuery, @Res() { ctx }: Response) {
         if (!keyword) {
             throw new BadRequestError('잘못된 요청입니다.');
         }
 
-        const pictures = await this.pictureRepo.getListByKeywords(keyword);
+        const pictures = await this.pictureRepo.getListByKeywords(keyword,query);
 
         if (pictures.length == 0) {
             throw new NotFoundError("요청하신 결과가 없습니다.")
