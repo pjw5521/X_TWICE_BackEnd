@@ -2,10 +2,10 @@ import "reflect-metadata";
 import { createConnection } from "typeorm";
 import Koa from "koa";
 import getDatabase from "./configs/database";
-import {  useKoaServer } from "routing-controllers";
+import { useKoaServer } from "routing-controllers";
 import { env } from "./env";
-import { CustomErrorHandler/* , handleError */ } from "./middlewares/ErrorHandler";
-
+import { CustomErrorHandler } from "./middlewares/ErrorHandler";
+import * as dotenv from "dotenv";
 
 // dotenv.config();
 
@@ -16,14 +16,16 @@ const bootstrap = async () => {
         const currentDir = __dirname; // 현재 디렉터리 경로
 
         const isProduction = env.isPRODUCTION; // 운영 환경 여부
-        const isTest = env.isTEST; // 테스트 환경 여부
-        const dirExt = isProduction || isTest ? 'js' : 'ts';
+        // const isTest = env.isTEST; // 테스트 환경 여부
+        const dirExt = isProduction /* || isTest */? 'js' : 'ts';
+
+        const envPath = isProduction ? ".env.production" : ".env"
+        console.log("env path : " + envPath)
+        dotenv.config({ path: envPath });
 
         const { connectionOptions } = getDatabase(currentDir, dirExt);
         await createConnection(connectionOptions[0]); 
-        // console.log(connectionOptions);
-
-        
+        // console.log(connectionOptions[0]);
         console.log('Success connected to Database');
 
         useKoaServer(app, {

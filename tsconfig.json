@@ -1,23 +1,23 @@
+
 {
-    "compilerOptions": {
-      "target": "es2017",
-      "lib": ["esnext", "ES2017", "ES2015", "ES5", "dom"],
-      "module": "commonjs",
-      "moduleResolution": "node",
-      "outDir": "./build",
-      "emitDecoratorMetadata": true,
-      "experimentalDecorators": true,
-      "allowSyntheticDefaultImports": true,
-      "resolveJsonModule": true, // JSON 허용 여부
-      "esModuleInterop": true,
-      "removeComments": true,
-      "skipLibCheck": true, // Build 시 라이브러리 체크 여부
-    },
-    "paths": {
-      "@/*": ["./*"],
-      "~/*": ["./*"]
-    },
-    "include": ["src/**/*"],
-    "exclude": ["node_modules"]
-  }
-  
+  "compilerOptions": {
+    "target": "es2017",
+    "lib": ["esnext", "ES2017", "ES2015", "ES5", "dom"],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "outDir": "./build",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true, // JSON 허용 여부
+    "esModuleInterop": true,
+    "removeComments": true,
+    "skipLibCheck": true, // Build 시 라이브러리 체크 여부
+  },
+  "paths": {
+    "@/*": ["./*"],
+    "~/*": ["./*"]
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
+}

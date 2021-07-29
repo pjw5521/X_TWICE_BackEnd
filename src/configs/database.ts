@@ -1,7 +1,4 @@
 import { ConnectionOptions } from "typeorm";
-import * as dotenv from 'dotenv';
-
-dotenv.config();
  
 export default function getDatabase(currentDir: string, dirExt: string) {
     const entitiesDir = 'entities';
