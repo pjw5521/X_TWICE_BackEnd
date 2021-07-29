@@ -20,6 +20,24 @@ export class BadRequestError extends HttpError {
     }
 }
 
+export class UnauthorizedError extends HttpError {
+    constructor(
+        public message: string, 
+        public extensions?: Record<string, any>
+    ) {
+        super(401, 'Unauthorized', message, extensions)
+    }
+}
+
+export class ForbiddenError extends HttpError {
+    constructor(
+        public message: string, 
+        public extensions?: Record<string, any>
+    ) {
+        super(403, 'Forbidden', message, extensions)
+    }
+}
+
 export class NotFoundError extends HttpError {
     constructor(
         public message: string, 

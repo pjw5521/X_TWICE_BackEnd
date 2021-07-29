@@ -1,16 +1,21 @@
 import { Response } from "koa";
-import { Body, Get, HttpCode, JsonController, Param, Post, Put, Res } from "routing-controllers";
+import { Authorized, Body, CurrentUser, Get, HttpCode, JsonController, Param, Post, Put, Res } from "routing-controllers";
 import { getCustomRepository } from "typeorm";
 import { NotFoundError } from "../error";
 import { UserInsertInput, UserUpdateInput } from "../models/UserInput";
 import { UserRepository } from "../repositories/UserRepository";
+import { TokenPayload } from "../types/tokens";
+import { TokenUtil } from "../utils/TokenUtil";
 
 @JsonController("/users")
 export class UserController {
 
     private userRepo: UserRepository;
+    private tokenUtil: TokenUtil;
+
     constructor() {
         this.userRepo = getCustomRepository(UserRepository);
+        this.tokenUtil = new TokenUtil();
     }
     
     @HttpCode(200)
@@ -54,8 +59,22 @@ export class UserController {
     }
 
     @HttpCode(200)
+    @Post("/login")
+    async login(@CurrentUser() user: TokenPayload, @Res() { ctx }: Response){
+        const signToken = await this.tokenUtil.signToken();
+
+        ctx.body = {
+            data: signToken
+        }
+
+        return ctx;
+    }
+
+    @HttpCode(200)
+    @Authorized()
     @Put()
-    async update(@Body() user: UserUpdateInput, @Res() { ctx }: Response) {
+    async update(@CurrentUser() payload: TokenPayload, @Body() user: UserUpdateInput, @Res() { ctx }: Response) {
+        console.log(payload);
         const updatedUser = await this.userRepo.updateWithOptions(user);
 
         ctx.body = {
@@ -64,8 +83,5 @@ export class UserController {
 
         return ctx;
     }
-
-
-
 
 }

@@ -2,10 +2,12 @@ import "reflect-metadata";
 import { createConnection } from "typeorm";
 import Koa from "koa";
 import getDatabase from "./configs/database";
-import { useKoaServer } from "routing-controllers";
+import { Action, useKoaServer } from "routing-controllers";
 import { env } from "./env";
 import { CustomErrorHandler } from "./middlewares/ErrorHandler";
 import * as dotenv from "dotenv";
+import { TokenUtil } from "./utils/TokenUtil";
+import { UnauthorizedError } from "./error";
 
 // dotenv.config();
 
@@ -28,13 +30,58 @@ const bootstrap = async () => {
         // console.log(connectionOptions[0]);
         console.log('Success connected to Database');
 
+        const tokenUtil = new TokenUtil();
+
         useKoaServer(app, {
             // cors: true,
             routePrefix: env.app.apiPrefix,
             controllers: [`${currentDir}/controllers/**/*.${dirExt}`],
             middlewares: [CustomErrorHandler],
             defaultErrorHandler: false,
-            validation: false
+            validation: false,
+            authorizationChecker: async (action: Action, roles: string[]) => {
+                try {
+                    const token = action?.request?.headers?.authorization;
+
+                    console.log(token);
+                
+                    let user = undefined;
+
+                    if (token) {
+                        user = await tokenUtil.veriftyToken(token);
+                    }
+
+                    if (user && !roles.length) {
+                        // console.log("true")
+                        return true;
+                    }
+                    // if (user && roles.find(role => user.roles.indexOf(role) !== -1)) return true;
+                    
+                    // console.log("false")
+                    throw new UnauthorizedError('잘못된 인증 정보입니다.')
+                } catch (err) {
+                    throw new UnauthorizedError('잘못된 인증 정보입니다.')
+                }
+            },
+            currentUserChecker: async (action: Action) => {
+                try {
+                    const token = action?.request?.headers?.authorization;
+                
+                    let user = undefined;
+
+                    if (token) {
+                        user = await tokenUtil.veriftyToken(token);
+                    }
+
+                    if (user) {
+                        return user;
+                    }
+
+                    throw new UnauthorizedError('잘못된 인증 정보입니다.')
+                } catch (err) {
+                    throw new UnauthorizedError('잘못된 인증 정보입니다.')
+                }
+            }
         });
 
         const PORT_NUMBER = env.app.portNumber;
