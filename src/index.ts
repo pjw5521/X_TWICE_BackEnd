@@ -8,8 +8,8 @@ import { CustomErrorHandler } from "./middlewares/ErrorHandler";
 import * as dotenv from "dotenv";
 import { TokenUtil } from "./utils/TokenUtil";
 import { UnauthorizedError } from "./error";
+import cors from "@koa/cors"
 
-// dotenv.config();
 
 const bootstrap = async () => {
     try {
@@ -32,8 +32,10 @@ const bootstrap = async () => {
 
         const tokenUtil = new TokenUtil();
 
+        app.use(cors());
+
         useKoaServer(app, {
-            cors: true,
+            // cors: true,
             routePrefix: env.app.apiPrefix,
             controllers: [`${currentDir}/controllers/**/*.${dirExt}`],
             middlewares: [CustomErrorHandler],
