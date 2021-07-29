@@ -15,22 +15,22 @@ export class GetMyListQuery {
 
     @IsOptional()
     @IsNumber()
-    first?: number;
+    first?: number = 0;
 
     @IsOptional()
     @IsNumber()
-    last?: number;
+    last?: number = 25;
     
 }
 
-export class GetListByKeywordsQuery{
+export class GetPagnation {
 
     @IsOptional()
     @IsNumber()
-    first?: number;
+    first?: number = 0;
 
     @IsOptional()
     @IsNumber()
-    last?: number;
+    last?: number = 25;
 
 }

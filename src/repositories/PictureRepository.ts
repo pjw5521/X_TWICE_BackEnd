@@ -3,7 +3,7 @@ import { DeepPartial, EntityRepository, Repository } from "typeorm";
 import { Picture } from "../entities/Picture";
 import { BadRequestError } from "../error";
 import { PictureSaleInput } from "../models/PictureInput";
-import { GetListByKeywordsQuery, GetMyListQuery } from "../models/UserQuery";
+import { GetMyListQuery, GetPagnation } from "../models/UserQuery";
 
 @EntityRepository(Picture)
 export class PictureRepository extends Repository<Picture> {
@@ -63,8 +63,14 @@ export class PictureRepository extends Repository<Picture> {
         return await qb.getMany();
     }
 
-    // 사진 검색하기
-    async getListByKeywords(keyword: string, query: GetListByKeywordsQuery) {
+    // 키워드로 사진 검색하기
+    async getListByKeywords(keyword: string, query: GetPagnation) {
+        const errors = await validate(query);
+
+        if (errors.length > 0) {
+            throw new BadRequestError('잘못된 요청입니다')
+        }
+
         const alias = "picture"
         
         const { first, last } = query;
@@ -83,16 +89,28 @@ export class PictureRepository extends Repository<Picture> {
         return await qb.getMany();
     }
 
-    async viewByPrice() {
+    // 가격순으로 사진 보기
+    async viewByPrice(query: GetPagnation) {
+        const errors = await validate(query);
+
+        if (errors.length > 0) {
+            throw new BadRequestError('잘못된 요청입니다')
+        }
+
         const alias = "picture"
+        
+        const { first, last } = query;
         
         const qb = this.createQueryBuilder(alias)
             .select([`${alias}.picture_url`, `${alias}.picture_title`])
             .orderBy(`${alias}.price`, "ASC")
+            .skip(first)
+            .take(last)
 
         return await qb.getMany();
     }
 
+    // 카테고리 별로 사진 보기
     async viewByCategory() {
         const alias = "picture"
         
@@ -102,16 +120,5 @@ export class PictureRepository extends Repository<Picture> {
             
         return await qb.getMany();
     }
-
-    async viewByPopular() {
-        const alias = "picture"
-        
-        const qb = this.createQueryBuilder(alias)
-            .select([`${alias}.picture_url`, `${alias}.picture_title`])
-            .groupBy(`${alias}.picture_category`)
-            
-        return await qb.getMany();
-    }
-
 
 }

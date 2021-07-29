@@ -1,7 +1,8 @@
+import { validate } from "class-validator";
 import { Response } from "koa";
 import { Authorized, Body, CurrentUser, Get, HttpCode, JsonController, Param, Post, Put, Res } from "routing-controllers";
 import { getCustomRepository } from "typeorm";
-import { NotFoundError } from "../error";
+import { BadRequestError, NotFoundError } from "../error";
 import { UserInsertInput, UserLoginInput, UserUpdateInput } from "../models/UserInput";
 import { UserRepository } from "../repositories/UserRepository";
 import { TokenPayload } from "../types/tokens";
@@ -46,7 +47,6 @@ export class UserController {
         return ctx;
     }
 
-
     @HttpCode(200)
     @Post()
     async insert(@Body() user: UserInsertInput, @Res() { ctx }: Response) {
@@ -62,6 +62,13 @@ export class UserController {
     @HttpCode(200)
     @Post("/login")
     async login(@Body() userInput: UserLoginInput, @Res() { ctx }: Response){
+        
+        const errors = await validate(userInput);
+
+        if (errors.length > 0) {
+            throw new BadRequestError('잘못된 요청입니다')
+        }
+        
         const { user_id } = userInput;
 
         const user = await this.userRepo.getOneById(user_id);

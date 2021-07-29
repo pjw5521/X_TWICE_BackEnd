@@ -15,7 +15,15 @@ export class UserRepository extends Repository<User> {
             throw new BadRequestError('잘못된 요청입니다')
         }
 
-        return await this.save(newValue, { transaction: false, reload: false });
+        const { user_id } = newValue;
+        // return await this.save(newValue, { transaction: false, reload: false });
+        const user = this.findOne({ user_id })
+
+        if (!user) {
+            return await this.insert(newValue);
+        }
+
+        throw new BadRequestError('이미 등록된 사용자입니다')
     }
 
     async updateWithOptions(updateValue: UserUpdateInput) {
@@ -32,16 +40,22 @@ export class UserRepository extends Repository<User> {
         const user = 'user';
 
         const params: QueryDeepPartialEntity<User> = {};
-        params.user_account = id;
+        params.user_id = id;
         
         const qb = this.createQueryBuilder(user)
-            .where(`${user}.user_account = :user_account`)
+            .where(`${user}.user_id = :user_id`)
             .setParameters(params);
 
         return await qb.getOne();
     }
 
     async getOneById(user_id: string) {
+        const errors = await validate(user_id);
+
+        if (errors.length > 0) {
+            throw new BadRequestError('잘못된 요청입니다')
+        }
+        
         const user = 'user';
 
         const params: QueryDeepPartialEntity<User> = {};

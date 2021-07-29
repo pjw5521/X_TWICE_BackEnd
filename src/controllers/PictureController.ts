@@ -4,7 +4,7 @@ import { getCustomRepository } from "typeorm";
 import { BadRequestError, NotFoundError } from "../error";
 import { Picture } from "../entities/Picture";
 import { PictureRepository } from "../repositories/PictureRepository";
-import { GetListByKeywordsQuery, GetMyListQuery, GetPicturesQuery } from "../models/UserQuery";
+import { GetMyListQuery, GetPagnation, GetPicturesQuery } from "../models/UserQuery";
 import { PictureSaleInput } from "../models/PictureInput";
 
 @JsonController("/pictures")
@@ -71,14 +71,14 @@ export class PictureController {
     @HttpCode(200)
     @Get("/:user_num")
     async getMyList(@Param('user_num') user_num: number, @QueryParams() query: GetMyListQuery, @Res() { ctx }: Response) {
-        const pictures = await this.pictureRepo.getMyList(user_num, query);
+        const tokens = await this.pictureRepo.getMyList(user_num, query);
 
-        if (pictures.length == 0) {
+        if (tokens.length == 0) {
             throw new NotFoundError("요청하신 결과가 없습니다.")
         }
 
         ctx.body = {
-            data: pictures
+            data: tokens
         }
 
         return ctx;
@@ -87,7 +87,8 @@ export class PictureController {
     // 키워드별 사진 검색하기
     @HttpCode(200)
     @Get("/keywords/:keyword")
-    async getListByKeywords(@Param('keyword') keyword: string, @QueryParams() query: GetListByKeywordsQuery, @Res() { ctx }: Response) {
+    async getListByKeywords(@Param('keyword') keyword: string, @QueryParams() query: GetPagnation, @Res() { ctx }: Response) {
+       
         if (!keyword) {
             throw new BadRequestError('잘못된 요청입니다.');
         }
@@ -104,5 +105,24 @@ export class PictureController {
 
         return ctx;
     }
+
+    // 가격순으로 사진보기 
+    @HttpCode(200)
+    @Get("/price")
+    async viewByPrice(@QueryParams() query: GetPagnation, @Res() { ctx }: Response) {
+
+        const pictures = await this.pictureRepo.viewByPrice(query);
+
+        if (pictures.length == 0) {
+            throw new NotFoundError("요청하신 결과가 없습니다.")
+        }
+
+        ctx.body = {
+            data: pictures
+        }
+
+        return ctx;
+    }
+
 
 }
