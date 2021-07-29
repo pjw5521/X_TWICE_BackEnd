@@ -30,3 +30,14 @@ export class UserUpdateInput implements Partial<User> {
     user_account?: string;
 
 }
+
+export class UserLoginInput implements Partial<User> {
+
+    @IsString()
+    @Length(5, 20)
+    user_id: string; 
+
+    //@IsHash("sha256")
+    user_password: string; 
+
+}

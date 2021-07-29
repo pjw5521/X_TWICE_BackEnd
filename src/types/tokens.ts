@@ -1,6 +1,7 @@
 export interface TokenClaims {
-    id: string;
-    account: string;
+    user_id: string;
+    user_num: number;
+    user_account: string;
 }
 
 export interface TokenPayload extends TokenClaims {

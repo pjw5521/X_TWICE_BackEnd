@@ -2,7 +2,7 @@ import { Response } from "koa";
 import { Authorized, Body, CurrentUser, Get, HttpCode, JsonController, Param, Post, Put, Res } from "routing-controllers";
 import { getCustomRepository } from "typeorm";
 import { NotFoundError } from "../error";
-import { UserInsertInput, UserUpdateInput } from "../models/UserInput";
+import { UserInsertInput, UserLoginInput, UserUpdateInput } from "../models/UserInput";
 import { UserRepository } from "../repositories/UserRepository";
 import { TokenPayload } from "../types/tokens";
 import { TokenUtil } from "../utils/TokenUtil";
@@ -46,6 +46,7 @@ export class UserController {
         return ctx;
     }
 
+
     @HttpCode(200)
     @Post()
     async insert(@Body() user: UserInsertInput, @Res() { ctx }: Response) {
@@ -60,8 +61,16 @@ export class UserController {
 
     @HttpCode(200)
     @Post("/login")
-    async login(@Res() { ctx }: Response){
-        const signToken = await this.tokenUtil.signToken();
+    async login(@Body() userInput: UserLoginInput, @Res() { ctx }: Response){
+        const { user_id } = userInput;
+
+        const user = await this.userRepo.getOneById(user_id);
+
+        if (!user) {
+            throw new NotFoundError("요청하신 결과가 없습니다.")
+        }
+
+        const signToken = await this.tokenUtil.signToken(user);
 
         ctx.body = {
             data: signToken

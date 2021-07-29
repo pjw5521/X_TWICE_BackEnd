@@ -1,13 +1,15 @@
 import * as jwt from "jsonwebtoken";
 import { SignOptions } from "jsonwebtoken";
+import { User } from "../entities/User";
 import { TokenClaims, TokenPayload } from "../types/tokens";
 
 export class TokenUtil {
     
-    async signToken() {
+    async signToken(user: User) {
+        const { user_id, user_num, user_account } = user
+
         const claims: TokenClaims = {
-            id: "jiwon",
-            account: "jiwon2"
+            user_id, user_num, user_account
         };
 
         const signKey = "X_TWICE_BACKEND";

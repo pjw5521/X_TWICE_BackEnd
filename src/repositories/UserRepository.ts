@@ -41,6 +41,19 @@ export class UserRepository extends Repository<User> {
         return await qb.getOne();
     }
 
+    async getOneById(user_id: string) {
+        const user = 'user';
+
+        const params: QueryDeepPartialEntity<User> = {};
+        params.user_id = user_id;
+        
+        const qb = this.createQueryBuilder(user)
+            .where(`${user}.user_id = :user_id`)
+            .setParameters(params);
+
+        return await qb.getOne();
+    }
+
     async getUserListByName(user_account: string) {
         const userAlias = 'user';
 
