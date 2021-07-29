@@ -17,6 +17,20 @@ export class User {
     length: 64,
   })
   user_account: string;
+
+  @Column({
+    type: DataType.varchar,
+    name: "user_id",
+    length: 20,
+  })
+  user_id: string;
+
+  @Column({
+    type: DataType.varchar,
+    name: "user_password",
+    length: 255,
+  })
+  user_password: string;
   
   @OneToMany(() => History, history => history.history_num)
   history: History[];
