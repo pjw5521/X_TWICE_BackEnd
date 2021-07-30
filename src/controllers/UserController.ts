@@ -51,11 +51,18 @@ export class UserController {
 
     @HttpCode(200)
     @Post()
-    async insert(@Body() user: UserInsertInput, @Res() { ctx }: Response) {
-        const isSuccess = await this.userRepo.insertWithOptions(user);
+    async insert(@Body() userInput: UserInsertInput, @Res() { ctx }: Response) {
+        const userInsertResult = await this.userRepo.insertWithOptions(userInput);
+
+        const { generatedMaps, identifiers } = userInsertResult;
+        const user = generatedMaps?.[0] || identifiers?.[0]
+
+        if (!user) {
+            throw new NotFoundError("처리된 회원정보를 찾지 못했습니다.");
+        }
 
         ctx.body = {
-            data: isSuccess
+            data: user
         }
 
         return ctx;
