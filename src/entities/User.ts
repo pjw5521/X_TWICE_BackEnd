@@ -32,9 +32,12 @@ export class User {
   })
   user_password: string;
   
-  @OneToMany(() => History, history => history.history_num)
-  history: History[];
+  @OneToMany(() => History, history => history.user1)
+  histories1: History[];
 
-  @OneToMany(() => Picture, picture => picture.token_id)
-  picture: Picture[];
+  @OneToMany(() => History, history => history.user2)
+  histories2: History[];
+
+  @OneToMany(() => Picture, picture => picture.user)
+  pictures: Picture[];
 }

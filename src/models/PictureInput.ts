@@ -16,6 +16,6 @@ export class ViewBycategoryQuery extends GetPagnation{
 
     @IsOptional()
     @IsString()
-    category?: string = "나무";
+    category?: string = "test";
     
 }

@@ -4,6 +4,7 @@ import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity
 import { User } from "../entities/User";
 import { BadRequestError } from "../error";
 import { UserInsertInput, UserUpdateInput } from "../models/UserInput";
+import { GetMyListQuery } from "../models/UserQuery";
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
@@ -82,6 +83,27 @@ export class UserRepository extends Repository<User> {
         return await qb.getMany();
     }
 
+    async getMyList(user_id: string, query: GetMyListQuery){
+        const errors = await validate(query);
 
+        if (errors.length > 0) {
+            throw new BadRequestError('잘못된 요청입니다')
+        }
+
+        const { state, first, last } = query;
+
+        const qb = this.createQueryBuilder("user")
+            .leftJoinAndSelect("user.pictures", "picture")
+            .where(`user.user_id = :user_id`)
+            .andWhere(`picture.picture_state = :state`)
+            .setParameters({
+                user_id,
+                state
+            }) 
+            .skip(first)
+            .take(last)
+
+        return await qb.getMany();
+    }
 
 }

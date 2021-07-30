@@ -1,9 +1,10 @@
 import { validate } from "class-validator";
 import { Response } from "koa";
-import { Authorized, Body, CurrentUser, Get, HttpCode, JsonController, Param, Post, Put, Res } from "routing-controllers";
+import { Authorized, Body, CurrentUser, Get, HttpCode, JsonController, Param, Post, Put, QueryParams, Res } from "routing-controllers";
 import { getCustomRepository } from "typeorm";
 import { BadRequestError, NotFoundError } from "../error";
 import { UserInsertInput, UserLoginInput, UserUpdateInput } from "../models/UserInput";
+import { GetMyListQuery } from "../models/UserQuery";
 import { UserRepository } from "../repositories/UserRepository";
 import { TokenPayload } from "../types/tokens";
 import { TokenUtil } from "../utils/TokenUtil";
@@ -99,5 +100,22 @@ export class UserController {
 
         return ctx;
     }
+    
+      // 토큰정보 확인하기 조인
+      @HttpCode(200)
+      @Get("/mylist/:user_id")
+      async getMyList(@Param('user_id') user_id: string, @QueryParams() query: GetMyListQuery, @Res() { ctx }: Response) {
+          const tokens = await this.userRepo.getMyList(user_id, query);
+  
+          if (tokens.length == 0) {
+              throw new NotFoundError("요청하신 결과가 없습니다.")
+          }
+  
+          ctx.body = {
+              data: tokens
+          }
+  
+          return ctx;
+      }
 
 }

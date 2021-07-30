@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, PrimaryColumn, JoinColumn } from 'typeorm';
 import { DataType } from '../types/database';
 import { Object_list } from './Object_list';
-import { Picture_objects } from './Picture_objects';
+import { Picture_object } from './Picture_object';
 import { User } from './User';
 
 @Entity('Pictures')
@@ -64,11 +64,17 @@ export class Picture {
   })
   picture_count: number;
 
-  @ManyToOne(() => User, user_num => user_num.user_num)
-  @JoinColumn({ name: "user_num" })
-  user_num: User;
+  @Column({
+    type: DataType.int,
+    name: "user_num"
+  })
+  user_num: number;
 
-  @OneToMany(() => Picture_objects, picture_object => picture_object.picture_object_num)
-  public picture_object!: Picture_objects[];
+  @ManyToOne(() => User, user => user.pictures)
+  @JoinColumn({ name: "user_num", referencedColumnName: "user_num"})
+  user: User;
+
+  @OneToMany(() => Picture_object, picture_object => picture_object.picture)
+  picture_objects: Picture_object[];
   
 }

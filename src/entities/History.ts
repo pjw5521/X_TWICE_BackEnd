@@ -17,6 +17,11 @@ export class History {
   })
   date: Date;
 
+  @Column({
+    type: DataType.int,
+    name: "user_num1",
+  })
+  user_num1: number;
 
   @Column({
     type: DataType.int,
@@ -44,7 +49,12 @@ export class History {
   })
   picture_price: number;
 
-  @ManyToOne((type) => User, user_num1 => user_num1.user_num)
-  @JoinColumn({ name: "user_num" })
-  user_num1: User;
+  @ManyToOne(() => User, user => user.user_num)
+  @JoinColumn({ name: "user_num1", referencedColumnName: "user_num" })
+  user1: User;
+
+  @ManyToOne(() => User, user => user.user_num)
+  @JoinColumn({ name: "user_num2", referencedColumnName: "user_num" })
+  user2: User;
+
 }

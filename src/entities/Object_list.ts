@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { DataType } from '../types/database';
-import { Picture_objects } from './Picture_objects';
+import { Picture_object } from './Picture_object';
 
 @Entity('Object_list')
 export class Object_list {
@@ -9,7 +9,7 @@ export class Object_list {
     type: DataType.int,
     name: "object_num",
   })
-  object__num: number;
+  object_num: number;
 
   @Column({
     type: DataType.varchar,
@@ -18,7 +18,7 @@ export class Object_list {
   })
   object_name: string;
 
-  @OneToMany(() => Picture_objects, picture_object => picture_object.picture_object_num)
-  public picture_object!: Picture_objects[];
+  @OneToMany(() => Picture_object, picture_object => picture_object.object_list)
+  picture_objects: Picture_object[];
   
 }

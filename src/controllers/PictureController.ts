@@ -1,12 +1,11 @@
 import { Response } from "koa";
-import { Body, Get, HttpCode, JsonController, Param, Post, Put, QueryParams, Res } from "routing-controllers";
+import { Body, Get, HttpCode, JsonController, Param, Params, Post, Put, QueryParams, Res } from "routing-controllers";
 import { getCustomRepository } from "typeorm";
 import { BadRequestError, NotFoundError } from "../error";
 import { Picture } from "../entities/Picture";
 import { PictureRepository } from "../repositories/PictureRepository";
-import { GetMyListQuery } from "../models/UserQuery";
 import { GetPagnation } from "../models/PageQuery";
-import { PictureSaleInput } from "../models/PictureInput";
+import { PictureSaleInput, ViewBycategoryQuery } from "../models/PictureInput";
 
 @JsonController("/pictures")
 export class PictureController {
@@ -68,23 +67,6 @@ export class PictureController {
         return ctx;
     }
 
-    // 토큰정보 확인하기 
-    @HttpCode(200)
-    @Get("/:user_num")
-    async getMyList(@Param('user_num') user_num: number, @QueryParams() query: GetMyListQuery, @Res() { ctx }: Response) {
-        const tokens = await this.pictureRepo.getMyList(user_num, query);
-
-        if (tokens.length == 0) {
-            throw new NotFoundError("요청하신 결과가 없습니다.")
-        }
-
-        ctx.body = {
-            data: tokens
-        }
-
-        return ctx;
-    }
-
     // 키워드별 사진 검색하기
     @HttpCode(200)
     @Get("/keywords/:keyword")
@@ -125,5 +107,67 @@ export class PictureController {
         return ctx;
     }
 
+    // 카테고리별로 사진 보기  
+    @HttpCode(200)
+    @Get("/category")
+    async viewByCategory(@QueryParams() query:  ViewBycategoryQuery, @Res() { ctx }: Response) {
+  
+        const pictures = await this.pictureRepo.viewByCategory(query);
+  
+        if (pictures.length == 0) {
+          throw new NotFoundError("요청하신 결과가 없습니다.")
+        }
+  
+        ctx.body = {
+          data: pictures
+        }
+  
+        return ctx;
+    }
+
+    // 인기순으로 사진보기 
+    @HttpCode(200)
+    @Get("/popular")
+    async viewByPopularity(@QueryParams() query: GetPagnation, @Res() { ctx }: Response) {
+
+        const pictures = await this.pictureRepo.viewByPopularity(query);
+
+        if (pictures.length == 0) {
+            throw new NotFoundError("요청하신 결과가 없습니다.")
+        }
+
+        ctx.body = {
+            data: pictures
+        }
+
+        return ctx;
+    }
+
+    // 사진 상세 정보 보기  
+    @HttpCode(200)
+    @Get("/:token_id")
+    async viewpicture(@Param('token_id') token_id: string, @Res() { ctx }: Response) {
+
+        const pictures = await this.pictureRepo.viewPicture(token_id);
+
+        ctx.body = {
+            data: pictures
+        }
+
+        return ctx;
+    }  
+
+    // 조회수 증가
+    @HttpCode(200)
+    @Put("/count/:token_id")
+    async updateCount(@Param('token_id') token_id: string, @Res() { ctx }: Response) { 
+        const isSuccess  = await this.pictureRepo.updateCount(token_id);
+
+        ctx.body = {
+            data: isSuccess 
+        }
+
+        return ctx;
+    }
 
 }
