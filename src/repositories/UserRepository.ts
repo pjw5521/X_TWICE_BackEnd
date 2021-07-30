@@ -21,11 +21,11 @@ export class UserRepository extends Repository<User> {
         // return await this.save(newValue, { transaction: false, reload: false });
         const user = this.findOne({ user_id })
 
-        if (!user) {
-            return await this.insert(newValue);
+        if (user) {
+            throw new BadRequestError('이미 등록된 사용자입니다')
         }
-
-        throw new BadRequestError('이미 등록된 사용자입니다')
+        
+        return await this.insert(newValue);
     }
 
     async updateWithOptions(updateValue: UserUpdateInput) {
