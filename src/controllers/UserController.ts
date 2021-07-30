@@ -3,6 +3,7 @@ import { Response } from "koa";
 import { Authorized, Body, CurrentUser, Get, HttpCode, JsonController, Param, Post, Put, QueryParams, Res } from "routing-controllers";
 import { getCustomRepository } from "typeorm";
 import { BadRequestError, NotFoundError } from "../error";
+import { GetPagnation } from "../models/PageQuery";
 import { UserInsertInput, UserLoginInput, UserUpdateInput } from "../models/UserInput";
 import { GetMyListQuery } from "../models/UserQuery";
 import { UserRepository } from "../repositories/UserRepository";
@@ -117,5 +118,22 @@ export class UserController {
   
           return ctx;
       }
+
+     // 거래내역 확인하기 조인
+     @HttpCode(200)
+     @Get("/history/:user_num1")
+     async getHistory(@Param('user_num1') user_num1: number,  @QueryParams() query: GetPagnation, @Res() { ctx }: Response) {
+        const history = await this.userRepo.getHistory(user_num1, query);
+
+        if (history.length == 0) {
+            throw new NotFoundError("요청하신 결과가 없습니다.")
+        }
+
+        ctx.body = {
+            data: history
+        }
+
+        return ctx;
+     }
 
 }

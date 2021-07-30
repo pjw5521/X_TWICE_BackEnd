@@ -26,20 +26,4 @@ export class HisyoryController {
         return ctx;
     }
 
-     // 거래내역 확인하기 조인
-     @HttpCode(200)
-     @Get("/:user_num1")
-     async getHistory(@Param('user_num1') user_num1: number, @Res() { ctx }: Response) {
-        const history = await this.historyRepo.getHistory(user_num1);
-
-        if (history.length == 0) {
-            throw new NotFoundError("요청하신 결과가 없습니다.")
-        }
-
-        ctx.body = {
-            data: history
-        }
-
-        return ctx;
-     }
 }

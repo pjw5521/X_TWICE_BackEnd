@@ -13,7 +13,7 @@ export class UserInsertInput implements Partial<User> {
     user_id: string; 
 
     @IsString()
-    @Length(5, 64)
+    @Length(5, 255)
     user_account: string;
 
     /* @IsHash("sha256")

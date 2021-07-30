@@ -14,7 +14,7 @@ export class User {
   @Column({
     type: DataType.varchar,
     name: "user_account",
-    length: 64,
+    length: 255,
   })
   user_account: string;
 
