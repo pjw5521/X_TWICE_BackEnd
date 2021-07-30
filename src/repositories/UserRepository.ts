@@ -52,11 +52,6 @@ export class UserRepository extends Repository<User> {
     }
 
     async getOneById(user_id: string) {
-        const errors = await validate(user_id);
-
-        if (errors.length > 0) {
-            throw new BadRequestError('잘못된 요청입니다')
-        }
         
         const user = 'user';
 
