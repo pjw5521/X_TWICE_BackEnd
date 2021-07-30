@@ -19,12 +19,12 @@ export class UserRepository extends Repository<User> {
 
         const { user_id } = newValue;
         // return await this.save(newValue, { transaction: false, reload: false });
-        const user = this.findOne({ user_id })
+        const user = await this.findOne({ user_id })
 
         if (user) {
             throw new BadRequestError('이미 등록된 사용자입니다')
         }
-        
+
         return await this.insert(newValue);
     }
 
