@@ -29,7 +29,8 @@ export class User {
     type: DataType.varchar,
     name: "user_password",
     length: 255,
-    default : "test"
+    default : "test",
+    select: false
   })
   user_password: string;
   
