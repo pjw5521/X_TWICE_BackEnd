@@ -1,11 +1,13 @@
 import { Response } from "koa";
-import { Body, Get, HttpCode, JsonController, Param, Params, Post, Put, QueryParams, Res } from "routing-controllers";
+import { Authorized, Body, Ctx, CurrentUser, Get, HttpCode, JsonController, Param, Params, Post, Put, QueryParams, Res } from "routing-controllers";
 import { getCustomRepository } from "typeorm";
 import { BadRequestError, NotFoundError } from "../error";
 import { Picture } from "../entities/Picture";
 import { PictureRepository } from "../repositories/PictureRepository";
 import { GetPagnation } from "../models/PageQuery";
-import { PictureSaleInput, ViewBycategoryQuery } from "../models/PictureInput";
+import { PictureInsertInput, PictureSaleInput, ViewBycategoryQuery } from "../models/PictureInput";
+import { validate } from "class-validator";
+import { TokenPayload } from "../types/tokens";
 
 @JsonController("/pictures")
 export class PictureController {
@@ -17,9 +19,21 @@ export class PictureController {
 
     // 사진 등록하기
     @HttpCode(200)
+    @Authorized()
     @Post()
-    async save(@Body() picture: Picture, @Res() { ctx }: Response) {
-        const isSuccess = await this.pictureRepo.saveWithOptions(picture);
+    async insert(@Body() picture: PictureInsertInput, @CurrentUser() payload: TokenPayload, @Res() { ctx }: Response) {
+        const errors = await validate(picture);
+
+        if (errors.length > 0) {
+            throw new BadRequestError('잘못된 요청입니다')
+        }
+
+        console.log(payload);
+
+        const { user_num } = payload;
+        picture.user_num = user_num;
+
+        const isSuccess = await this.pictureRepo.insertWithOptions(picture);
 
         ctx.body = {
             data: isSuccess
@@ -30,8 +44,18 @@ export class PictureController {
 
     // 사진 정보 수정하기
     @HttpCode(200)
+    @Authorized()
     @Put()
-    async update(@Body() picture: Picture, @Res() { ctx }: Response) { 
+    async update(@Body() picture: Picture, @CurrentUser() payload: TokenPayload, @Res() { ctx }: Response) { 
+        const errors = await validate(picture);
+
+        if (errors.length > 0) {
+            throw new BadRequestError('잘못된 요청입니다')
+        }
+
+        const { user_num } = payload;
+        picture.user_num = user_num;
+        
         const isSuccess  = await this.pictureRepo.saveWithOptions(picture);
 
         ctx.body = {

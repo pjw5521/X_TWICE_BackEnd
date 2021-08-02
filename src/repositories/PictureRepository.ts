@@ -4,13 +4,18 @@ import { QueryPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 import { Picture } from "../entities/Picture";
 import { BadRequestError } from "../error";
 import { GetPagnation } from "../models/PageQuery";
-import { PictureSaleInput, ViewBycategoryQuery } from "../models/PictureInput";
+import { PictureInsertInput, PictureSaleInput, PictureUpdateInput, ViewBycategoryQuery } from "../models/PictureInput";
 
 @EntityRepository(Picture)
 export class PictureRepository extends Repository<Picture> {
    
-    // 사진 등록하기, 업데이트하기
-    async saveWithOptions(newValue: Picture){
+    // 사진 등록하기
+    async insertWithOptions(newValue: PictureInsertInput){
+        return await this.insert(newValue);
+    }
+
+     // 사진 업데이트하기
+    async saveWithOptions(newValue: PictureUpdateInput){
         return await this.save(newValue,{ transaction: false, reload: false });
     }
 
