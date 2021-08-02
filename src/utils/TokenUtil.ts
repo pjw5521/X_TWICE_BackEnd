@@ -16,7 +16,7 @@ export class TokenUtil {
 
         const signOptions: SignOptions = {
             algorithm: "HS256",
-            expiresIn: "1h"
+            expiresIn: 60
         }
 
         const newToken = await jwt.sign(claims, signKey, signOptions)
