@@ -1,5 +1,6 @@
 import { validate } from "class-validator";
 import { DeepPartial, EntityRepository, Repository } from "typeorm";
+import { QueryPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 import { Picture } from "../entities/Picture";
 import { BadRequestError } from "../error";
 import { GetPagnation } from "../models/PageQuery";
@@ -148,15 +149,20 @@ export class PictureRepository extends Repository<Picture> {
 
     // 조회수 증가 
     async updateCount(token_id: string){
+
+        /* QueryDeepPartial<Type> 예제 */
+        const picture: QueryPartialEntity<Picture> = {};
+        picture.picture_count = () => "`picture_count` + 1";
+        // picture.createdAt = () => "now()";
+
         const qb = this.createQueryBuilder()
             .update(Picture)
-            .set({
-                picture_count: () => "`picture_count` + 1"
-            })
+            .set(picture)
             .where("token_id = :token_id")
             .setParameters({
                 token_id
-            })
+            });
+        
 
         return await qb.execute();
     }

@@ -6,7 +6,7 @@ import { History } from "../entities/History";
 import { HistoryRepository } from "../repositories/HistoryRepository";
 
 @JsonController("/histories")
-export class HisyoryController {
+export class HistoryController {
 
     private historyRepo: HistoryRepository;
     constructor() {

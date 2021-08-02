@@ -107,7 +107,7 @@ export class UserRepository extends Repository<User> {
 
         const qb = this.createQueryBuilder("user") 
             .leftJoinAndSelect("user.histories1", "history")
-            .where("user.user_num1 = :user_num1")
+            .where("user.user_num = :user_num1")
             .setParameters({ 
                 user_num1: user_num1
             })

@@ -1,6 +1,7 @@
 import { validate } from "class-validator";
 import { Response } from "koa";
 import { Authorized, Body, CurrentUser, Get, HttpCode, JsonController, Param, Post, Put, QueryParams, Res } from "routing-controllers";
+import { OpenAPI } from "routing-controllers-openapi";
 import { getCustomRepository } from "typeorm";
 import { BadRequestError, NotFoundError } from "../error";
 import { GetPagnation } from "../models/PageQuery";
@@ -23,6 +24,15 @@ export class UserController {
     
     @HttpCode(200)
     @Get()
+    @OpenAPI({
+        summary: "유저 목록 조회",
+        description: '유저 목록 가져옵니다.',
+        responses: {
+            '404': {
+                description: 'Not Found',
+            },
+        },
+    })
     async getUserListByName (@Res() { ctx }: Response) {
         const users = await this.userRepo.getUserListByName("ni");
         
