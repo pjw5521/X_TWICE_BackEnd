@@ -40,6 +40,7 @@ export class UserLoginInput implements Partial<User> {
     user_id: string; 
 
     //@IsHash("sha256")
+    @IsString()
     user_password: string; 
 
 }
