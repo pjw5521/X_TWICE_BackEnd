@@ -4,7 +4,7 @@ import { History } from "../entities/History";
 export class HistoryInsertInput implements Partial<History> {
 
     @IsNumber()
-    user_num2
+    user_num2:number;
 
     @IsString()
     token_id: string;
@@ -21,8 +21,6 @@ export class HistoryInsertInput implements Partial<History> {
     @IsString()
     picture_info: string;
 
-    user_num: number;
-    /* @IsHash("sha256")
-    user_password: string; */ 
-
+    user_num1: number;
+    
 }

@@ -21,8 +21,8 @@ export class PictureController {
     @HttpCode(200)
     @Authorized()
     @Post()
-    async insert(@Body() picture: PictureInsertInput, @CurrentUser() payload: TokenPayload, @Res() { ctx }: Response) {
-        const errors = await validate(picture);
+    async insert(@Body() pictureInsertInput: PictureInsertInput, @CurrentUser() payload: TokenPayload, @Res() { ctx }: Response) {
+        const errors = await validate(pictureInsertInput);
 
         if (errors.length > 0) {
             throw new BadRequestError('잘못된 요청입니다')
@@ -31,12 +31,19 @@ export class PictureController {
         console.log(payload);
 
         const { user_num } = payload;
-        picture.user_num = user_num;
+        pictureInsertInput.user_num = user_num;
 
-        const isSuccess = await this.pictureRepo.insertWithOptions(picture);
+        const pictureInsertResult = await this.pictureRepo.insertWithOptions(pictureInsertInput);
+
+        const { generatedMaps, identifiers } = pictureInsertResult;
+        const picture = generatedMaps?.[0] || identifiers?.[0]
+
+        if (!picture) {
+            throw new NotFoundError("처리된 회원정보를 찾지 못했습니다.");
+        }
 
         ctx.body = {
-            data: isSuccess
+            data: pictureInsertInput
         }
 
         return ctx;

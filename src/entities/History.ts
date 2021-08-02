@@ -11,11 +11,12 @@ export class History {
   })
   history_num: number;
 
-  @Column({
-    type: DataType.date,
-    name: "date",
+  @Column({ 
+    type: "timestamp", 
+    name: "createdAt",
+    default: () => "CURRENT_TIMESTAMP"
   })
-  date: Date;
+  createdAt: string;
 
   @Column({
     type: DataType.int,
