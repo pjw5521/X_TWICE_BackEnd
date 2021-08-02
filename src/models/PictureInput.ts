@@ -5,23 +5,18 @@ import { GetPagnation } from "./PageQuery";
 export class PictureInsertInput implements Partial<Picture> {
 
     @IsString()
-    @Length(5, 255)
     token_id: string;
 
     @IsString()
-    @Length(5, 20)
     picture_url: string;
 
     @IsString()
-    @Length(5, 20)
     picture_title: string;
 
     @IsString()
-    @Length(5, 20)
     picture_category: string;
 
     @IsString()
-    @Length(5, 200)
     picture_info: string;
 
     user_num: number;

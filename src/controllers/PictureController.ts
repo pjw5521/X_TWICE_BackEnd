@@ -5,7 +5,7 @@ import { BadRequestError, NotFoundError } from "../error";
 import { Picture } from "../entities/Picture";
 import { PictureRepository } from "../repositories/PictureRepository";
 import { GetPagnation } from "../models/PageQuery";
-import { PictureInsertInput, PictureSaleInput, ViewBycategoryQuery } from "../models/PictureInput";
+import { PictureInsertInput, PictureSaleInput, PictureUpdateInput, ViewBycategoryQuery } from "../models/PictureInput";
 import { validate } from "class-validator";
 import { TokenPayload } from "../types/tokens";
 
@@ -46,7 +46,7 @@ export class PictureController {
     @HttpCode(200)
     @Authorized()
     @Put()
-    async update(@Body() picture: Picture, @CurrentUser() payload: TokenPayload, @Res() { ctx }: Response) { 
+    async update(@Body() picture: PictureUpdateInput, @CurrentUser() payload: TokenPayload, @Res() { ctx }: Response) { 
         const errors = await validate(picture);
 
         if (errors.length > 0) {

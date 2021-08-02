@@ -106,7 +106,7 @@ const bootstrap = async () => {
           
         const spec = routingControllersToSpec(storage, routingControllerOptions, {
             components: { schemas },
-            info: { title: 'My app', version: '1.2.0' },
+            info: { title: 'X_TWICE_BackEnd', version: '1.0.0' },
         })
 
         const router = new Router();
