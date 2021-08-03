@@ -1,13 +1,16 @@
 import { validate } from "class-validator";
 import { Response } from "koa";
 import { Authorized, Body, CurrentUser, Get, HttpCode, JsonController, Param, Post, Put, QueryParams, Res } from "routing-controllers";
-import { OpenAPI } from "routing-controllers-openapi";
+import { OpenAPI, ResponseSchema } from "routing-controllers-openapi";
 import { getCustomRepository } from "typeorm";
-import { BadRequestError, NotFoundError } from "../error";
+import { User } from "../entities/User";
+import { BadRequestError, HttpError, NotFoundError } from "../error";
 import { GetPagnation } from "../models/PageQuery";
 import { UserInsertInput, UserLoginInput, UserUpdateInput } from "../models/UserInput";
 import { GetMyListQuery } from "../models/UserQuery";
 import { UserRepository } from "../repositories/UserRepository";
+import { HttpStatus } from "../types/http";
+import { NotFoundResponse, SuccessReponse } from "../types/swagger";
 import { TokenPayload } from "../types/tokens";
 import { TokenUtil } from "../utils/TokenUtil";
 
@@ -22,25 +25,32 @@ export class UserController {
         this.tokenUtil = new TokenUtil();
     }
     
-    @HttpCode(200)
+    @HttpCode(HttpStatus.success)
     @Get()
+    @ResponseSchema(User, {
+        statusCode: HttpStatus.success,
+        isArray: true
+    })
+    @ResponseSchema(HttpError, {
+        statusCode: HttpStatus.not_found,
+    })
     @OpenAPI({
         summary: "유저 목록 조회",
         description: '유저 목록 가져옵니다.',
         responses: {
-            '404': {
-                description: 'Not Found',
-            },
+            ...SuccessReponse,
+            ...NotFoundResponse
         },
     })
     async getUserListByName (@Res() { ctx }: Response) {
-        const users = await this.userRepo.getUserListByName("ni");
+        const users = await this.userRepo.getUserListByName("test");
         
         if (users.length == 0) {
             throw new NotFoundError("요청하신 결과가 없습니다.")
         }
         
         ctx.body = {
+            // status: HttpStatus.success,
             data: users
         }
 

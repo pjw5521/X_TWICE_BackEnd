@@ -1,12 +1,31 @@
-class HttpError extends Error {
+import { IsInt, IsObject, IsOptional, IsString } from "class-validator";
+import { HttpStatus, HttpName } from "./types/http";
+
+export class HttpError extends Error {
+
+    @IsInt()
+    status: number;
+
+    @IsString()
+    name: string;
+
+    @IsString()
+    message: string;
+
+    @IsOptional()
+    @IsObject()
+    extensions?: Record<string, any>
 
     constructor(
-        public status: number,
-        public name: string, 
-        public message: string, 
-        public extensions?: Record<string, any>
+        status: number,
+        name: string, 
+        message: string, 
+        extensions?: Record<string, any>
     ) {
         super(message);
+        this.status = status;
+        this.name = name;
+        this.extensions = extensions;
     }
 
 }
@@ -16,7 +35,7 @@ export class BadRequestError extends HttpError {
         public message: string, 
         public extensions?: Record<string, any>
     ) {
-        super(400, 'Bad Request', message, extensions)
+        super(HttpStatus.bad_request, HttpName.bad_request, message, extensions)
     }
 }
 
@@ -25,7 +44,7 @@ export class UnauthorizedError extends HttpError {
         public message: string, 
         public extensions?: Record<string, any>
     ) {
-        super(401, 'Unauthorized', message, extensions)
+        super(HttpStatus.unauthorized, HttpName.unauthorized, message, extensions)
     }
 }
 
@@ -34,7 +53,7 @@ export class ForbiddenError extends HttpError {
         public message: string, 
         public extensions?: Record<string, any>
     ) {
-        super(403, 'Forbidden', message, extensions)
+        super(HttpStatus.forbidden, HttpName.forbidden, message, extensions)
     }
 }
 
@@ -43,6 +62,6 @@ export class NotFoundError extends HttpError {
         public message: string, 
         public extensions?: Record<string, any>
     ) {
-        super(404, 'Not Found', message, extensions)
+        super(HttpStatus.not_found, HttpName.not_found, message, extensions)
     }
 }

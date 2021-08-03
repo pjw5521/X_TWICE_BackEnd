@@ -1,3 +1,4 @@
+import { IsInt, IsOptional, IsString } from 'class-validator';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { DataType } from '../types/database';
 import { History } from './History';
@@ -9,6 +10,7 @@ export class User {
     type: DataType.int,
     name: "user_num",
   })
+  @IsInt()
   user_num: number;
 
   @Column({
@@ -16,6 +18,7 @@ export class User {
     name: "user_account",
     length: 255,
   })
+  @IsString()
   user_account: string;
 
   @Column({
@@ -23,6 +26,7 @@ export class User {
     name: "user_id",
     length: 20,
   })
+  @IsString()
   user_id: string;
 
   @Column({

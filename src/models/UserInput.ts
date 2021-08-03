@@ -9,11 +9,11 @@ export class UserInsertInput implements Partial<User> {
     ;  */
 
     @IsString()
-    @Length(5, 20)
+    @Length(5, 20, { each: true })
     user_id: string; 
 
     @IsString()
-    @Length(5, 255)
+    @Length(5, 255, { each: true })
     user_account: string;
 
     /* @IsHash("sha256")
@@ -28,7 +28,7 @@ export class UserUpdateInput implements Partial<User> {
 
     @ValidateIf((_, value) => value !== undefined)
     @IsString()
-    @Length(5, 64)
+    @Length(5, 64, { each: true })
     user_id?: string;
 
 }
@@ -36,7 +36,7 @@ export class UserUpdateInput implements Partial<User> {
 export class UserLoginInput implements Partial<User> {
 
     @IsString()
-    @Length(5, 20)
+    @Length(5, 20, { each: true })
     user_id: string; 
 
     //@IsHash("sha256")

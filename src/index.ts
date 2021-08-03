@@ -109,6 +109,9 @@ const bootstrap = async () => {
             info: { title: 'X_TWICE_BackEnd', version: '1.0.0' },
         })
 
+        // console.log(JSON.stringify(spec.paths, null, 2));
+        // console.log(JSON.stringify(spec.components.schemas, null, 2));
+
         const router = new Router();
 
         router.use(koaSwagger({ swaggerOptions: { spec } }));
