@@ -1,7 +1,8 @@
 import { Context, Next } from "koa";
-import { KoaMiddlewareInterface, Middleware } from "routing-controllers";
-import { HttpError } from "../error";
+import { Action, KoaMiddlewareInterface, Middleware } from "routing-controllers";
+import { HttpError, UnauthorizedError } from "../error";
 import { HttpName, HttpStatus } from "../types/http";
+import { TokenUtil } from "../utils/TokenUtil";
 
 @Middleware({ type: "before", priority: 50 })
 export class CustomErrorHandler implements KoaMiddlewareInterface {
@@ -24,5 +25,52 @@ export class CustomErrorHandler implements KoaMiddlewareInterface {
     
             ctx.app.emit('error', err, ctx);
         }
+    }
+}
+
+const tokenUtil = new TokenUtil();
+
+export async function authorizationCheker (action: Action, roles: string[]) {
+    try {
+        const token = action?.request?.headers?.authorization;
+
+        console.log(token);
+    
+        let user = undefined;
+
+        if (token) {
+            user = await tokenUtil.veriftyToken(token);
+        }
+
+        if (user && !roles.length) {
+            // console.log("true")
+            return true;
+        }
+        // if (user && roles.find(role => user.roles.indexOf(role) !== -1)) return true;
+        
+        // console.log("false")
+        throw new UnauthorizedError('잘못된 인증 정보입니다.')
+    } catch (err) {
+        throw new UnauthorizedError('잘못된 인증 정보입니다.')
+    }
+}
+
+export async function currentUserChecker (action: Action) {
+    try {
+        const token = action?.request?.headers?.authorization;
+    
+        let user = undefined;
+
+        if (token) {
+            user = await tokenUtil.veriftyToken(token);
+        }
+
+        if (user) {
+            return user;
+        }
+
+        throw new UnauthorizedError('잘못된 인증 정보입니다.')
+    } catch (err) {
+        throw new UnauthorizedError('잘못된 인증 정보입니다.')
     }
 }

@@ -4,10 +4,9 @@ import Koa from "koa";
 import getDatabase from "./configs/database";
 import { Action, getMetadataArgsStorage, RoutingControllersOptions, useKoaServer } from "routing-controllers";
 import { env } from "./env";
-import { CustomErrorHandler } from "./middlewares/ErrorHandler";
+import { authorizationCheker, currentUserChecker, CustomErrorHandler } from "./middlewares/ErrorHandler";
 import * as dotenv from "dotenv";
 import { TokenUtil } from "./utils/TokenUtil";
-import { UnauthorizedError } from "./error";
 import cors from "@koa/cors"
 import { validationMetadatasToSchemas } from "class-validator-jsonschema";
 import { routingControllersToSpec } from "routing-controllers-openapi";
@@ -42,57 +41,14 @@ const bootstrap = async () => {
         
 
         /* Routing -Controllers 연동 */
-        const tokenUtil = new TokenUtil();
-
         const routingControllerOptions: RoutingControllersOptions =  {
             routePrefix: env.app.apiPrefix,
             controllers: [`${currentDir}/controllers/**/*.${dirExt}`],
             middlewares: [CustomErrorHandler],
             defaultErrorHandler: false,
             validation: false,
-            authorizationChecker: async (action: Action, roles: string[]) => {
-                try {
-                    const token = action?.request?.headers?.authorization;
-
-                    console.log(token);
-                
-                    let user = undefined;
-
-                    if (token) {
-                        user = await tokenUtil.veriftyToken(token);
-                    }
-
-                    if (user && !roles.length) {
-                        // console.log("true")
-                        return true;
-                    }
-                    // if (user && roles.find(role => user.roles.indexOf(role) !== -1)) return true;
-                    
-                    // console.log("false")
-                    throw new UnauthorizedError('잘못된 인증 정보입니다.')
-                } catch (err) {
-                    throw new UnauthorizedError('잘못된 인증 정보입니다.')
-                }
-            },
-            currentUserChecker: async (action: Action) => {
-                try {
-                    const token = action?.request?.headers?.authorization;
-                
-                    let user = undefined;
-
-                    if (token) {
-                        user = await tokenUtil.veriftyToken(token);
-                    }
-
-                    if (user) {
-                        return user;
-                    }
-
-                    throw new UnauthorizedError('잘못된 인증 정보입니다.')
-                } catch (err) {
-                    throw new UnauthorizedError('잘못된 인증 정보입니다.')
-                }
-            }
+            authorizationChecker: async (action: Action, roles: string[]) => await authorizationCheker(action, roles),
+            currentUserChecker: async (action: Action) => await currentUserChecker(action)
         };
 
         useKoaServer(app, routingControllerOptions);
