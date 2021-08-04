@@ -10,7 +10,7 @@ import { UserInsertInput, UserLoginInput, UserUpdateInput } from "../models/User
 import { GetMyListQuery } from "../models/UserQuery";
 import { UserRepository } from "../repositories/UserRepository";
 import { HttpStatus } from "../types/http";
-import { NotFoundResponse, SuccessReponse } from "../types/swagger";
+import { BadRequestResponse, NotFoundResponse, SuccessReponse } from "../types/swagger";
 import { TokenPayload } from "../types/tokens";
 import { TokenUtil } from "../utils/TokenUtil";
 
@@ -59,6 +59,17 @@ export class UserController {
 
     @HttpCode(200)
     @Get("/:id")
+    @ResponseSchema(User, {
+        statusCode: HttpStatus.success,
+        isArray: true
+    })
+    @OpenAPI({
+        summary: "회원정보 조회",
+        description: '해당 id의 회원 정보를 조회합니다.',
+        responses: {
+            ...SuccessReponse,
+        },
+    })
     async getOne(@Param('id') id: string, @Res() { ctx }: Response) {
         const user = await this.userRepo.getOne(id);
 
@@ -71,7 +82,27 @@ export class UserController {
 
     @HttpCode(200)
     @Post()
+    @ResponseSchema(User, {
+        statusCode: HttpStatus.success,
+        isArray: true
+    })
+    @ResponseSchema(HttpError, {
+        statusCode: HttpStatus.not_found,
+    })
+    @OpenAPI({
+        summary: "회원가입",
+        responses: {
+            ...SuccessReponse,
+            ...NotFoundResponse
+        },
+    })
     async insert(@Body() userInput: UserInsertInput, @Res() { ctx }: Response) {
+        const errors = await validate(userInput);
+
+        if (errors.length > 0) {
+            throw new BadRequestError('잘못된 요청입니다')
+        }
+        
         const userInsertResult = await this.userRepo.insertWithOptions(userInput);
 
         const { generatedMaps, identifiers } = userInsertResult;
@@ -90,6 +121,24 @@ export class UserController {
 
     @HttpCode(200)
     @Post("/login")
+    @ResponseSchema(User, {
+        statusCode: HttpStatus.success,
+        isArray: true
+    })
+    @ResponseSchema(HttpError, {
+        statusCode: HttpStatus.not_found,
+    })
+    @ResponseSchema(HttpError, {
+        statusCode: HttpStatus.bad_request,
+    })
+    @OpenAPI({
+        summary: "로그인",
+        responses: {
+            ...SuccessReponse,
+            ...NotFoundResponse,
+            ...BadRequestResponse
+        },
+    })
     async login(@Body() userInput: UserLoginInput, @Res() { ctx }: Response){
         
         const errors = await validate(userInput);
@@ -118,8 +167,31 @@ export class UserController {
     @HttpCode(200)
     @Authorized()
     @Put()
+    @ResponseSchema(User, {
+        statusCode: HttpStatus.success,
+        isArray: true
+    })
+    @ResponseSchema(HttpError, {
+        statusCode: HttpStatus.bad_request,
+    })
+    @OpenAPI({
+        summary: "회원 정보 수정",
+        responses: {
+            ...SuccessReponse,
+            ...BadRequestResponse
+        },
+    })
     async update(@CurrentUser() payload: TokenPayload, @Body() user: UserUpdateInput, @Res() { ctx }: Response) {
-        console.log(payload);
+       
+        const { user_num } = payload;
+        user.user_num = user_num;
+
+        const errors = await validate(user);
+
+        if (errors.length > 0) {
+            throw new BadRequestError('잘못된 요청입니다')
+        }
+
         const updatedUser = await this.userRepo.updateWithOptions(user);
 
         ctx.body = {
@@ -130,10 +202,35 @@ export class UserController {
     }
     
       // 토큰정보 확인하기 조인
-      @HttpCode(200)
-      @Get("/mylist/:user_id")
-      async getMyList(@Param('user_id') user_id: string, @QueryParams() query: GetMyListQuery, @Res() { ctx }: Response) {
-          const tokens = await this.userRepo.getMyList(user_id, query);
+    @HttpCode(200)
+    @Get("/mylist/:user_id")
+    @ResponseSchema(User, {
+        statusCode: HttpStatus.success,
+        isArray: true
+    })
+    @ResponseSchema(HttpError, {
+        statusCode: HttpStatus.not_found,
+    })
+    @ResponseSchema(HttpError, {
+        statusCode: HttpStatus.bad_request,
+    })
+    @OpenAPI({
+        summary: "회원 토큰 정보 조회",
+        description: "state가 N이면 보유토큰, Y이면 판매토큰 정보를 조회합니다.",
+        responses: {
+            ...SuccessReponse,
+            ...NotFoundResponse,
+            ...BadRequestResponse
+        },
+    })
+    async getMyList(@Param('user_id') user_id: string, @QueryParams() query: GetMyListQuery, @Res() { ctx }: Response) {
+        const errors = await validate(query);
+
+        if (errors.length > 0) {
+            throw new BadRequestError('잘못된 요청입니다')
+        }
+
+        const tokens = await this.userRepo.getMyList(user_id, query);
   
           if (tokens.length == 0) {
               throw new NotFoundError("요청하신 결과가 없습니다.")
@@ -146,10 +243,25 @@ export class UserController {
           return ctx;
       }
 
-     // 거래내역 확인하기 조인
+     // 거래내역 확인하기 
      @HttpCode(200)
      @Get("/history/:user_num1")
-     async getHistory(@Param('user_num1') user_num1: number,  @QueryParams() query: GetPagnation, @Res() { ctx }: Response) {
+     @ResponseSchema(User, {
+        statusCode: HttpStatus.success,
+        isArray: true
+    })
+    @ResponseSchema(HttpError, {
+        statusCode: HttpStatus.not_found,
+    })
+    @OpenAPI({
+        summary: "거래 내역 조회",
+        description: "해당 id의 history를 조회합니다.",
+        responses: {
+            ...SuccessReponse,
+            ...NotFoundResponse,
+        },
+    })
+    async getHistory(@Param('user_num1') user_num1: number,  @QueryParams() query: GetPagnation, @Res() { ctx }: Response) {
         const history = await this.userRepo.getHistory(user_num1, query);
 
         if (history.length == 0) {
@@ -161,6 +273,6 @@ export class UserController {
         }
 
         return ctx;
-     }
+    }
 
 }

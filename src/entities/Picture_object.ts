@@ -1,4 +1,5 @@
 
+import { IsInt, IsString } from 'class-validator';
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { DataType } from '../types/database';
 import { Object_list } from './Object_list';
@@ -11,6 +12,7 @@ export class Picture_object {
     type: DataType.int,
     name: "picture_object_num",
   })
+  @IsInt()
   picture_object_num: number;
 
   @Column({
@@ -18,12 +20,14 @@ export class Picture_object {
     name: "token_id",
     length: 100
   })
+  @IsString()
   token_id: string;
 
   @Column({
     type: DataType.int,
     name: "object_num",
   })
+  @IsInt()
   object_num: number;
 
   @ManyToOne(() => Picture, picture => picture.picture_objects)

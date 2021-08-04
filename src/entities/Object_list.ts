@@ -1,3 +1,4 @@
+import { IsInt, IsString } from 'class-validator';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { DataType } from '../types/database';
 import { Picture_object } from './Picture_object';
@@ -9,6 +10,7 @@ export class Object_list {
     type: DataType.int,
     name: "object_num",
   })
+  @IsInt()
   object_num: number;
 
   @Column({
@@ -16,6 +18,7 @@ export class Object_list {
     name: "object_name",
     length: 45,
   })
+  @IsString()
   object_name: string;
 
   @OneToMany(() => Picture_object, picture_object => picture_object.object_list)

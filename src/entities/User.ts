@@ -38,6 +38,15 @@ export class User {
   })
   user_password: string;
   
+  @Column({
+    type: DataType.varchar,
+    name: "user_privatekey",
+    length: 255,
+    default : "test",
+    select: false
+  })
+  user_privatekey: string;
+
   @OneToMany(() => History, history => history.user1)
   histories1: History[];
 

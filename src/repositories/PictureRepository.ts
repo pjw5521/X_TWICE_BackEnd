@@ -21,12 +21,7 @@ export class PictureRepository extends Repository<Picture> {
 
     // 판매 토큰으로 등록하기
     async registerSale( newValue: PictureSaleInput){
-        const errors = await validate(newValue);
-
-        if (errors.length > 0) {
-            throw new BadRequestError('잘못된 요청입니다')
-        }
-
+       
         const { token_id, picture_price } = newValue;
 
         const picture: DeepPartial<Picture> = {
@@ -50,12 +45,6 @@ export class PictureRepository extends Repository<Picture> {
 
      // 키워드별 사진 검색하기
      async getListByKeywords(keyword: string, query: GetPagnation) {
-        const errors = await validate(query);
-
-        if (errors.length > 0) {
-            throw new BadRequestError('잘못된 요청입니다')
-        }
-
         const alias = "picture"
         
         const { first, last } = query;
@@ -76,11 +65,6 @@ export class PictureRepository extends Repository<Picture> {
 
     // 가격순으로 사진 보기
     async viewByPrice(query: GetPagnation) {
-        const errors = await validate(query);
-
-        if (errors.length > 0) {
-            throw new BadRequestError('잘못된 요청입니다')
-        }
 
         const alias = "picture"
         
@@ -99,12 +83,6 @@ export class PictureRepository extends Repository<Picture> {
      async viewByCategory(query: ViewBycategoryQuery) {
         const alias = "picture"
         
-        const errors = await validate(query);
-
-        if (errors.length > 0) {
-            throw new BadRequestError('잘못된 요청입니다')
-        }
-
         const { category, first, last } = query;
 
         const qb = this.createQueryBuilder(alias)
@@ -120,12 +98,6 @@ export class PictureRepository extends Repository<Picture> {
     // 인기순으로 사진보기
     async viewByPopularity(query: GetPagnation) {
         const alias = "picture"
-        
-        const errors = await validate(query);
-
-        if (errors.length > 0) {
-            throw new BadRequestError('잘못된 요청입니다')
-        }
 
         const { first, last } = query;
 

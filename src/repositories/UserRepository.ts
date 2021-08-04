@@ -11,12 +11,6 @@ import { GetMyListQuery } from "../models/UserQuery";
 export class UserRepository extends Repository<User> {
 
     async insertWithOptions(newValue: UserInsertInput) {
-        const errors = await validate(newValue);
-
-        if (errors.length > 0) {
-            throw new BadRequestError('잘못된 요청입니다')
-        }
-
         const { user_id } = newValue;
         // return await this.save(newValue, { transaction: false, reload: false });
         const user = await this.findOne({ user_id })
@@ -29,12 +23,7 @@ export class UserRepository extends Repository<User> {
     }
 
     async updateWithOptions(updateValue: UserUpdateInput) {
-        const errors = await validate(updateValue);
-
-        if (errors.length > 0) {
-            throw new BadRequestError('잘못된 요청입니다')
-        }
-
+    
         return await this.save(updateValue, { transaction: false, reload: false })
     }
 
@@ -79,12 +68,7 @@ export class UserRepository extends Repository<User> {
         return await qb.getMany();
     }
 
-    async getMyList(user_id: string, query: GetMyListQuery){
-        const errors = await validate(query);
-
-        if (errors.length > 0) {
-            throw new BadRequestError('잘못된 요청입니다')
-        }
+    async getMyList(user_id: string, query: GetMyListQuery){   
 
         const { state, first, last } = query;
 

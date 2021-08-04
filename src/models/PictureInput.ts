@@ -27,7 +27,6 @@ export class PictureInsertInput implements Partial<Picture> {
 
 export class PictureUpdateInput implements Partial<Picture> {
    
-    @IsOptional()
     @IsString()
     @Length(5, 255)
     token_id?: string;

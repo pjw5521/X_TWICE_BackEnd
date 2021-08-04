@@ -1,3 +1,4 @@
+import { IsInt, IsString } from 'class-validator';
 import { Entity, PrimaryGeneratedColumn, Column,ManyToOne, JoinColumn } from 'typeorm';
 import { DataType } from '../types/database';
 import { User } from './User';
@@ -9,6 +10,7 @@ export class History {
     type: DataType.int,
     name: "history_num",
   })
+  @IsInt()
   history_num: number;
 
   @Column({ 
@@ -16,18 +18,21 @@ export class History {
     name: "createdAt",
     default: () => "CURRENT_TIMESTAMP"
   })
+  @IsString()
   createdAt: string;
 
   @Column({
     type: DataType.int,
     name: "user_num1",
   })
+  @IsInt()
   user_num1: number;
 
   @Column({
     type: DataType.int,
     name: "user_num2",
   })
+  @IsInt()
   user_num2: number;
 
   @Column({
@@ -35,6 +40,7 @@ export class History {
     name: "picture_url",
     length: 100,
   })
+  @IsString()
   picture_url: string;
 
   @Column({
@@ -42,12 +48,14 @@ export class History {
     name: "picture_title",
     length: 45,
   })
+  @IsString()
   picture_title: string;
 
   @Column({
     type: "int",
     name: "picture_price",
   })
+  @IsInt()
   picture_price: number;
 
   @ManyToOne(() => User, user => user.user_num)

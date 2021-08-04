@@ -1,3 +1,4 @@
+import { IsIn, IsInt, IsOptional, IsString } from 'class-validator';
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, PrimaryColumn, JoinColumn } from 'typeorm';
 import { DataType } from '../types/database';
 import { Object_list } from './Object_list';
@@ -12,6 +13,7 @@ export class Picture {
     name: "token_id",
     length: 100
   })
+  @IsString()
   token_id: string;
 
   @Column({
@@ -19,6 +21,7 @@ export class Picture {
     name: "picture_url",
     length: 100,
   })
+  @IsString()
   picture_url: string;
 
   @Column({
@@ -26,6 +29,7 @@ export class Picture {
     name: "picture_title",
     length: 45,
   })
+  @IsString()
   picture_title: string;
 
   @Column({
@@ -33,6 +37,7 @@ export class Picture {
     name: "picture_category",
     length: 45,
   })
+  @IsString()
   picture_category: string;
 
   @Column({
@@ -41,6 +46,7 @@ export class Picture {
     default: "N",
     length: 10
   })
+  @IsString()
   picture_state: string;
 
   @Column({
@@ -48,6 +54,7 @@ export class Picture {
     name: "picture_info",
     length: 300,
   })
+  @IsString()
   picture_info: string;
 
   @Column({
@@ -55,6 +62,7 @@ export class Picture {
     name: "picture_price",
     default: 0
   })
+  @IsOptional()
   picture_price: number;
 
   @Column({
@@ -68,6 +76,7 @@ export class Picture {
     type: DataType.int,
     name: "user_num"
   })
+  @IsInt()
   user_num: number;
 
   @ManyToOne(() => User, user => user.pictures)

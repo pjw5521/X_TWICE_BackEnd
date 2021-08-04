@@ -23,7 +23,6 @@ export class UserInsertInput implements Partial<User> {
 
 export class UserUpdateInput implements Partial<User> {
 
-    @IsInt()
     user_num: number;
 
     @ValidateIf((_, value) => value !== undefined)
