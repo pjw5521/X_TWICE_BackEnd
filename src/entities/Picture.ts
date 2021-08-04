@@ -1,7 +1,6 @@
 import { IsIn, IsInt, IsOptional, IsString } from 'class-validator';
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, PrimaryColumn, JoinColumn } from 'typeorm';
+import { Entity, Column, ManyToOne, OneToMany, PrimaryColumn, JoinColumn } from 'typeorm';
 import { DataType } from '../types/database';
-import { Object_list } from './Object_list';
 import { Picture_object } from './Picture_object';
 import { User } from './User';
 
@@ -71,7 +70,7 @@ export class Picture {
     default: 0
   })
   picture_count: number;
-
+s
   @Column({
     type: DataType.int,
     name: "user_num"

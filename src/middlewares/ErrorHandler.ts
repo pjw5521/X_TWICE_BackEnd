@@ -11,14 +11,14 @@ export class CustomErrorHandler implements KoaMiddlewareInterface {
             await next()
         } catch (err) {
             const { status, name, message, extensions, stack } = err as HttpError;
-            //const currentStatus = status || HttpStatus.internal_server;
-            //const currentName = name || HttpName.internal_server
+            const currentStatus = status || HttpStatus.internal_server;
+            const currentName = name || HttpName.internal_server
             console.log(stack)
     
-            // ctx.status = currentStatus;
+            ctx.status = currentStatus;
             ctx.body = {
-                status: status || HttpStatus.internal_server,
-                name: name || HttpName.internal_server,
+                status: currentStatus,
+                name: currentName,
                 message: message,
                 extensions: extensions
             };
