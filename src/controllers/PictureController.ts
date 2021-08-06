@@ -338,7 +338,7 @@ export class PictureController {
 
         ctx.body = {
             data: {
-                itmes: pictures,
+                items: pictures,
                 count
             }
         }
