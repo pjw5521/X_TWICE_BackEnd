@@ -50,7 +50,7 @@ export class PictureRepository extends Repository<Picture> {
         const { first, last } = query;
         
         const qb = this.createQueryBuilder(alias)
-            .select([`${alias}.picture_url`, `${alias}.picture_title`])
+           // .select([`${alias}.picture_url`, `${alias}.picture_title`])
             .where(`${alias}.picture_title LIKE :keyword`)
             .orWhere(`${alias}.picture_info LIKE :keyword`)
             .orWhere(`${alias}.picture_category LIKE :keyword`)
@@ -71,7 +71,7 @@ export class PictureRepository extends Repository<Picture> {
         const { first, last } = query;
         
         const qb = this.createQueryBuilder(alias)
-            .select([`${alias}.picture_url`, `${alias}.picture_title`])
+            //.select([`${alias}.picture_url`, `${alias}.picture_title`])
             .orderBy(`${alias}.picture_price`, "DESC") // 높은 가격 순, 낮은 가격 순 나누기 
             .skip(first)
             .take(last)
@@ -86,7 +86,7 @@ export class PictureRepository extends Repository<Picture> {
         const { category, first, last } = query;
 
         const qb = this.createQueryBuilder(alias)
-            .select([`${alias}.picture_url`, `${alias}.picture_title`])
+            //.select([`${alias}.picture_url`, `${alias}.picture_title`])
             .where(`${alias}.picture_category= :category`)
             .setParameters( { category } )
             .skip(first)
@@ -102,12 +102,12 @@ export class PictureRepository extends Repository<Picture> {
         const { first, last } = query;
 
         const qb = this.createQueryBuilder(alias)
-            .select([`${alias}.picture_url`, `${alias}.picture_title`])
+           // .select([`${alias}.picture_url`, `${alias}.picture_title`])
             .orderBy(`${alias}.picture_count`, "DESC")
             .skip(first)
             .take(last)
             
-        return await qb.getMany();
+        return await qb.getManyAndCount();
     }
 
     //사진 상세 정보 보기 
