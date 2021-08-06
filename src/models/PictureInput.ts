@@ -33,7 +33,6 @@ export class PictureUpdateInput implements Partial<Picture> {
 
     @IsOptional()
     @IsString()
-    @Length(5, 20)
     picture_url?: string;
 
     @IsOptional()
