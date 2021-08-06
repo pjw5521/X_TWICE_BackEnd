@@ -326,14 +326,21 @@ export class PictureController {
             throw new BadRequestError('잘못된 요청입니다')
         }
         
-        const pictures = await this.pictureRepo.viewByPopularity(query);
+        const result = await this.pictureRepo.viewByPopularity(query);
 
-        if (pictures.length == 0) {
+        
+        const pictures = result[0];
+        const count = result[1];
+        
+        if (pictures.length == 0 || count == 0) {
             throw new NotFoundError("요청하신 결과가 없습니다.")
         }
 
         ctx.body = {
-            data: pictures
+            data: {
+                itmes: pictures,
+                count
+            }
         }
 
         return ctx;
