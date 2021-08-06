@@ -11,6 +11,12 @@ export class PictureInsertInput implements Partial<Picture> {
     picture_url: string;
 
     @IsString()
+    picture_directory: string;
+
+    @IsString()
+    picture_name: string;
+
+    @IsString()
     picture_title: string;
 
     @IsString()
@@ -34,6 +40,14 @@ export class PictureUpdateInput implements Partial<Picture> {
     @IsOptional()
     @IsString()
     picture_url?: string;
+
+    @IsOptional()
+    @IsString()
+    picture_directory?: string;
+
+    @IsOptional()
+    @IsString()
+    picture_name?: string;
 
     @IsOptional()
     @IsString()

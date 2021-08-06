@@ -33,6 +33,22 @@ export class Picture {
 
   @Column({
     type: DataType.varchar,
+    name: "picture_directory",
+    length: 100,
+  })
+  @IsString()
+  picture_directory: string;
+
+  @Column({
+    type: DataType.varchar,
+    name: "picture_name",
+    length: 100,
+  })
+  @IsString()
+  picture_name: string;
+
+  @Column({
+    type: DataType.varchar,
     name: "picture_category",
     length: 45,
   })
@@ -70,7 +86,7 @@ export class Picture {
     default: 0
   })
   picture_count: number;
-s
+
   @Column({
     type: DataType.int,
     name: "user_num"
