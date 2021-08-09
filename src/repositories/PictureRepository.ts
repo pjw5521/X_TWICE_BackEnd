@@ -60,7 +60,7 @@ export class PictureRepository extends Repository<Picture> {
             .skip(first)
             .take(last)
 
-        return await qb.getMany();
+        return await qb.getManyAndCount();
     }
 
     // 가격순으로 사진 보기
@@ -76,7 +76,7 @@ export class PictureRepository extends Repository<Picture> {
             .skip(first)
             .take(last)
 
-        return await qb.getMany();
+        return await qb.getManyAndCount();
     }
 
      // 카테고리 별로 사진 보기
@@ -92,7 +92,7 @@ export class PictureRepository extends Repository<Picture> {
             .skip(first)
             .take(last)
             
-        return await qb.getMany();
+        return await qb.getManyAndCount();
     }
 
     // 인기순으로 사진보기

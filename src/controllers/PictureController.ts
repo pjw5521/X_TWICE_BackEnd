@@ -200,14 +200,20 @@ export class PictureController {
             throw new BadRequestError('잘못된 요청입니다')
         }
 
-        const pictures = await this.pictureRepo.getListByKeywords(keyword,query);
+        const result = await this.pictureRepo.getListByKeywords(keyword,query);
 
-        if (pictures.length == 0) {
+        const pictures = result[0];
+        const count = result[1];
+
+        if (pictures.length == 0 || count == 0) {
             throw new NotFoundError("요청하신 결과가 없습니다.")
         }
 
         ctx.body = {
-            data: pictures
+            data: {
+                items: pictures,
+                count
+            }
         }
 
         return ctx;
@@ -242,14 +248,20 @@ export class PictureController {
             throw new BadRequestError('잘못된 요청입니다')
         }
 
-        const pictures = await this.pictureRepo.viewByPrice(query);
+        const result = await this.pictureRepo.viewByPrice(query);
 
-        if (pictures.length == 0) {
+        const pictures = result[0];
+        const count = result[1];
+
+        if (pictures.length == 0 || count == 0) {
             throw new NotFoundError("요청하신 결과가 없습니다.")
         }
 
         ctx.body = {
-            data: pictures
+            data: {
+                items: pictures,
+                count
+            }
         }
 
         return ctx;
@@ -284,14 +296,20 @@ export class PictureController {
             throw new BadRequestError('잘못된 요청입니다')
         }
 
-        const pictures = await this.pictureRepo.viewByCategory(query);
+        const result = await this.pictureRepo.viewByCategory(query);
   
+        const pictures = result[0];
+        const count = result[1];
+
         if (pictures.length == 0) {
           throw new NotFoundError("요청하신 결과가 없습니다.")
         }
   
         ctx.body = {
-          data: pictures
+          data: {
+              items: pictures,
+              count
+          }
         }
   
         return ctx;
