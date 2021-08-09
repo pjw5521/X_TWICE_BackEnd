@@ -205,9 +205,9 @@ export class PictureController {
         const pictures = result[0];
         const count = result[1];
 
-        if (pictures.length == 0 || count == 0) {
+        /* if (pictures.length == 0 || count == 0) {
             throw new NotFoundError("요청하신 결과가 없습니다.")
-        }
+        } */
 
         ctx.body = {
             data: {
@@ -253,9 +253,9 @@ export class PictureController {
         const pictures = result[0];
         const count = result[1];
 
-        if (pictures.length == 0 || count == 0) {
+        /* if (pictures.length == 0 || count == 0) {
             throw new NotFoundError("요청하신 결과가 없습니다.")
-        }
+        } */
 
         ctx.body = {
             data: {
@@ -301,9 +301,9 @@ export class PictureController {
         const pictures = result[0];
         const count = result[1];
 
-        if (pictures.length == 0) {
-          throw new NotFoundError("요청하신 결과가 없습니다.")
-        }
+        /* if (pictures.length == 0 || count == 0) {
+            throw new NotFoundError("요청하신 결과가 없습니다.")
+        } */
   
         ctx.body = {
           data: {
@@ -350,9 +350,9 @@ export class PictureController {
         const pictures = result[0];
         const count = result[1];
         
-        if (pictures.length == 0 || count == 0) {
+        /* if (pictures.length == 0 || count == 0) {
             throw new NotFoundError("요청하신 결과가 없습니다.")
-        }
+        } */
 
         ctx.body = {
             data: {
