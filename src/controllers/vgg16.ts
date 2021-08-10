@@ -1,4 +1,4 @@
-/*import { Curl } from "node-libcurl"
+import { Curl } from "node-libcurl"
 import { JsonController } from "routing-controllers"
 
 @JsonController("/vgg16")
@@ -14,7 +14,12 @@ export class Vgg16Controller{
         const test_url = "http://127.0.0.1:8080/predictions/densenet161"
         
         curl.setOpt(Curl.option.URL, test_url);
-        curl.setOpt(Curl.option., test_url);
+        curl.setOpt(Curl.option.HTTPPOST, [
+            { name: 'test_input', file: photo_url }
+        ]);
+        
+        curl.on('end', close);
+        curl.on('error', close);
     }
 
-}*/
+}
