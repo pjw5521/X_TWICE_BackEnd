@@ -5,7 +5,7 @@ import { User } from "../entities/User";
 import { BadRequestError } from "../error";
 import { GetPagnation } from "../models/PageQuery";
 import { UserInsertInput, UserUpdateInput } from "../models/UserInput";
-import { GetMyListQuery } from "../models/UserQuery";
+import { GetMyListQuery } from "../models/PictureQuery";
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
@@ -68,7 +68,7 @@ export class UserRepository extends Repository<User> {
         return await qb.getMany();
     }
 
-    async getMyList(user_id: string, query: GetMyListQuery){   
+  /*  async getMyList(user_id: string, query: GetMyListQuery){   
 
         const { state, first, last } = query;
 
@@ -84,7 +84,7 @@ export class UserRepository extends Repository<User> {
             .take(last)
 
         return await qb.getManyAndCount();
-    }
+    }*/
 
     async getHistory(user_num1: number, query: GetPagnation) {
         const { first, last } = query;

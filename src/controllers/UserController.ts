@@ -7,7 +7,7 @@ import { User } from "../entities/User";
 import { BadRequestError, HttpError, NotFoundError } from "../error";
 import { GetPagnation } from "../models/PageQuery";
 import { UserInsertInput, UserLoginInput, UserUpdateInput } from "../models/UserInput";
-import { GetMyListQuery } from "../models/UserQuery";
+import { GetMyListQuery } from "../models/PictureQuery";
 import { UserRepository } from "../repositories/UserRepository";
 import { HttpStatus } from "../types/http";
 import { BadRequestResponse, NotFoundResponse, SuccessReponse } from "../types/swagger";
@@ -202,7 +202,7 @@ export class UserController {
     }
     
       // 토큰정보 확인하기 조인
-    @HttpCode(200)
+  /*  @HttpCode(200)
     @Get("/mylist/:user_id")
     @ResponseSchema(User, {
         statusCode: HttpStatus.success,
@@ -232,7 +232,7 @@ export class UserController {
 
         const result = await this.userRepo.getMyList(user_id, query);
   
-        const tokens  = result[0];
+        const tokens  = result[0]
         const count = result[1];
   
           ctx.body = {
@@ -243,8 +243,8 @@ export class UserController {
           }
   
           return ctx;
-      }
-
+      }*/
+     
      // 거래내역 확인하기 
      @HttpCode(200)
      @Get("/history/:user_num1")

@@ -11,6 +11,7 @@ import { OpenAPI, ResponseSchema } from "routing-controllers-openapi";
 import { Picture } from "../entities/Picture";
 import { HttpStatus } from "../types/http";
 import { BadRequestResponse, NotFoundResponse, SuccessReponse } from "../types/swagger";
+import { GetMyListQuery } from "../models/PictureQuery";
 
 @JsonController("/pictures")
 export class PictureController {
@@ -412,5 +413,54 @@ export class PictureController {
 
         return ctx;
     }
+
+    //보유 토큰 확인하기
+    @HttpCode(200)
+    @Authorized()
+    @Get("/mylist/:user_id")
+    @ResponseSchema(Picture, {
+        statusCode: HttpStatus.success,
+        isArray: true
+    })
+    @ResponseSchema(HttpError, {
+        statusCode: HttpStatus.not_found,
+    })
+    @ResponseSchema(HttpError, {
+        statusCode: HttpStatus.bad_request,
+    })
+    @OpenAPI({
+        summary: "회원 토큰 정보 조회",
+        description: "state가 N이면 보유토큰, Y이면 판매토큰 정보를 조회합니다.",
+        responses: {
+            ...SuccessReponse,
+            ...NotFoundResponse,
+            ...BadRequestResponse
+        },
+    })
+    async getMyList(@CurrentUser() payload: TokenPayload, user_num1: number, @QueryParams() query: GetMyListQuery, @Res() { ctx }: Response) {
+      const { user_num } = payload;
+      user_num1 = user_num;  
+
+      const errors = await validate(query);
+
+        if (errors.length > 0) {
+            throw new BadRequestError('잘못된 요청입니다')
+        }
+
+        const result = await this.pictureRepo.getMyList(user_num, query);
+  
+        const tokens  = result[0]
+        const count = result[1];
+  
+          ctx.body = {
+            data: {
+                items: tokens,
+                count
+            }
+          }
+  
+          return ctx;
+      }
+
 
 }

@@ -5,6 +5,7 @@ import { Picture } from "../entities/Picture";
 import { BadRequestError } from "../error";
 import { GetPagnation } from "../models/PageQuery";
 import { PictureInsertInput, PictureSaleInput, PictureUpdateInput, ViewBycategoryQuery } from "../models/PictureInput";
+import { GetMyListQuery } from "../models/PictureQuery";
 
 @EntityRepository(Picture)
 export class PictureRepository extends Repository<Picture> {
@@ -64,6 +65,26 @@ export class PictureRepository extends Repository<Picture> {
         return await qb.getManyAndCount();
     }
 
+    // 보유 토큰 확인하기 
+    async getMyList(user_num: number, query: GetMyListQuery){   
+       
+        const alias = "picture"
+
+        const { state, first, last } = query;
+
+        const qb = this.createQueryBuilder(alias)
+            .where(`${alias}.user_num = :user_num`)
+            .andWhere(`${alias}.picture_state = :state`)
+            .setParameters({
+                user_num,
+                state
+            }) 
+            .skip(first)
+            .take(last)
+
+        return await qb.getManyAndCount();
+    }
+    
     // 가격순으로 사진 보기
     async viewByPrice(query: GetPagnation) {
 
