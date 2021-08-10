@@ -417,7 +417,7 @@ export class PictureController {
     //보유 토큰 확인하기
     @HttpCode(200)
     @Authorized()
-    @Get("/mylist/:user_id")
+    @Get("/mylist")
     @ResponseSchema(Picture, {
         statusCode: HttpStatus.success,
         isArray: true
@@ -446,7 +446,6 @@ export class PictureController {
         if (errors.length > 0) {
             throw new BadRequestError('잘못된 요청입니다')
         }
-
         const result = await this.pictureRepo.getMyList(user_num, query);
   
         const tokens  = result[0]
