@@ -230,14 +230,16 @@ export class UserController {
             throw new BadRequestError('잘못된 요청입니다')
         }
 
-        const tokens = await this.userRepo.getMyList(user_id, query);
+        const result = await this.userRepo.getMyList(user_id, query);
   
-          if (tokens.length == 0) {
-              throw new NotFoundError("요청하신 결과가 없습니다.")
-          }
+        const tokens  = result[0];
+        const count = result[1];
   
           ctx.body = {
-              data: tokens
+            data: {
+                items: tokens,
+                count
+            }
           }
   
           return ctx;

@@ -83,7 +83,7 @@ export class UserRepository extends Repository<User> {
             .skip(first)
             .take(last)
 
-        return await qb.getMany();
+        return await qb.getManyAndCount();
     }
 
     async getHistory(user_num1: number, query: GetPagnation) {
