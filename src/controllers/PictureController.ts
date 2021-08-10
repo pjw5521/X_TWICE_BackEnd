@@ -367,7 +367,7 @@ export class PictureController {
 
     // 사진 상세 정보 보기  
     @HttpCode(200)
-    @Get("/:token_id")
+    @Get("/info/:token_id")
     @ResponseSchema(Picture, {
         statusCode: HttpStatus.success,
         isArray: true
@@ -437,16 +437,16 @@ export class PictureController {
             ...BadRequestResponse
         },
     })
-    async getMyList(@CurrentUser() payload: TokenPayload, user_num1: number, @QueryParams() query: GetMyListQuery, @Res() { ctx }: Response) {
-      const { user_num } = payload;
-      user_num1 = user_num;  
+    async getMyList(@CurrentUser() payload: TokenPayload, @QueryParams() query: GetMyListQuery, @Res() { ctx }: Response) {
+     const { user_num } = payload;
+     const corrent_user_num = user_num 
 
       const errors = await validate(query);
 
         if (errors.length > 0) {
             throw new BadRequestError('잘못된 요청입니다')
         }
-        const result = await this.pictureRepo.getMyList(user_num, query);
+        const result = await this.pictureRepo.getMyList(corrent_user_num, query);
   
         const tokens  = result[0]
         const count = result[1];
