@@ -54,6 +54,7 @@ export class PictureRepository extends Repository<Picture> {
             .where(`${alias}.picture_title LIKE :keyword`)
             .orWhere(`${alias}.picture_info LIKE :keyword`)
             .orWhere(`${alias}.picture_category LIKE :keyword`)
+            .andWhere(`${alias}.picture_state=  "Y"`)
             .setParameters({
                 keyword: `%${keyword}%`
             })
@@ -73,6 +74,7 @@ export class PictureRepository extends Repository<Picture> {
         const qb = this.createQueryBuilder(alias)
             //.select([`${alias}.picture_url`, `${alias}.picture_title`])
             .orderBy(`${alias}.picture_price`, "DESC") // 높은 가격 순, 낮은 가격 순 나누기 
+            .where(`${alias}.picture_state=  "Y"`)
             .skip(first)
             .take(last)
 
@@ -89,6 +91,7 @@ export class PictureRepository extends Repository<Picture> {
             //.select([`${alias}.picture_url`, `${alias}.picture_title`])
             .where(`${alias}.picture_category= :category`)
             .setParameters( { category } )
+            .andWhere(`${alias}.picture_state=  "Y"`)
             .skip(first)
             .take(last)
             
@@ -104,6 +107,7 @@ export class PictureRepository extends Repository<Picture> {
         const qb = this.createQueryBuilder(alias)
            // .select([`${alias}.picture_url`, `${alias}.picture_title`])
             .orderBy(`${alias}.picture_count`, "DESC")
+            .andWhere(`${alias}.picture_state=  "Y"`)
             .skip(first)
             .take(last)
             
