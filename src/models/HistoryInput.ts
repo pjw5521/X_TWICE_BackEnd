@@ -7,9 +7,6 @@ export class HistoryInsertInput implements Partial<History> {
     user_num2:number;
 
     @IsString()
-    token_id: string;
-
-    @IsString()
     picture_url: string;
 
     @IsString()
@@ -17,9 +14,6 @@ export class HistoryInsertInput implements Partial<History> {
 
     @IsNumber()
     picture_price: number;
-
-    @IsString()
-    picture_info: string;
 
     user_num1: number;
     

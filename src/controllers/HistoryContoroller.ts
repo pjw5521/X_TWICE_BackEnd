@@ -41,9 +41,9 @@ export class HistoryController {
             ...BadRequestResponse
         },
     })
-    async register(@Body() history: HistoryInsertInput, @CurrentUser() payload: TokenPayload, @Res() { ctx }: Response) {
-        const { user_num } = payload;
-        history.user_num1 = user_num;
+    async register(@Body() history: HistoryInsertInput/*, @CurrentUser() payload: TokenPayload,*/, @Res() { ctx }: Response) {
+        //onst { user_num } = payload;
+        history.user_num1 = 28
         
         const errors = await validate(history);
 
