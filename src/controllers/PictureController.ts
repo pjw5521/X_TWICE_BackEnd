@@ -440,7 +440,7 @@ export class PictureController {
     })
     async getMyList(@CurrentUser() payload: TokenPayload, @QueryParams() query: GetMyListQuery, @Res() { ctx }: Response) {
      const { user_num } = payload;
-     const corrent_user_num = user_num 
+     const corrent_user_num = user_num; 
 
       const errors = await validate(query);
 

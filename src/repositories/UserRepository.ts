@@ -86,21 +86,5 @@ export class UserRepository extends Repository<User> {
         return await qb.getManyAndCount();
     }*/
 
-    async getHistory(user_num1: number, query: GetPagnation) {
-        const { first, last } = query;
-
-        const qb = this.createQueryBuilder("user") 
-            .leftJoinAndSelect("user.histories1", "history")
-            .where("user.user_num = :user_num1")
-            .setParameters({ 
-                user_num1: user_num1
-            })
-            .skip(first)
-            .take(last)
-        
-        return await qb.getMany();
-        // return await this.findOne(user_num);
-
-    }
 
 }

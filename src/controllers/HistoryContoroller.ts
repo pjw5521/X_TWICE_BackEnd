@@ -1,15 +1,16 @@
 import { Response } from "koa";
-import { Body, CurrentUser, Get, HttpCode, JsonController, Param, Post, Res } from "routing-controllers";
+import { Authorized, Body, CurrentUser, Get, HttpCode, JsonController, Param, Post, QueryParams, Res } from "routing-controllers";
 import { getCustomRepository } from "typeorm";
 import { HistoryRepository } from "../repositories/HistoryRepository";
 import { HistoryInsertInput } from "../models/HistoryInput";
 import { TokenPayload } from "../types/tokens";
 import { validate } from "class-validator";
-import { BadRequestError, HttpError } from "../error";
+import { BadRequestError, HttpError, NotFoundError } from "../error";
 import { OpenAPI, ResponseSchema } from "routing-controllers-openapi";
 import { HttpStatus } from "../types/http";
 import { BadRequestResponse, NotFoundResponse, SuccessReponse } from "../types/swagger";
 import { History } from "../entities/History";
+import { GetPagnation } from "../models/PageQuery";
 
 @JsonController("/histories")
 export class HistoryController {
@@ -59,4 +60,54 @@ export class HistoryController {
         return ctx;
     }
 
+    //거래 내역 확인하기 
+    @HttpCode(200)
+    @Authorized()
+    @Get()
+    @ResponseSchema(History, {
+        statusCode: HttpStatus.success,
+        isArray: true
+    })
+    @ResponseSchema(HttpError, {
+        statusCode: HttpStatus.not_found,
+    })
+    @ResponseSchema(HttpError, {
+        statusCode: HttpStatus.bad_request,
+    })
+    @OpenAPI({
+        summary: "거래 내역 조회",
+        description: "해당 id의 history를 조회합니다.",
+        responses: {
+            ...SuccessReponse,
+            ...NotFoundResponse,
+            ...BadRequestResponse
+        },
+    })
+    async getHistory(@CurrentUser() payload: TokenPayload,  @QueryParams() query: GetPagnation, @Res() { ctx }: Response) {
+        
+        const { user_num } = payload;
+        const corrent_user_num = user_num;
+
+        const errors = await validate(query);
+
+            if (errors.length > 0) {
+            throw new BadRequestError('잘못된 요청입니다')
+         }
+
+        const result = await this.historyRepo.getHistory(corrent_user_num, query);
+
+        const history  = result[0]
+        const count = result[1];
+    
+        ctx.body = {
+            data: {
+                items: history,
+                count
+            }
+        }
+    
+         return ctx;
+    }
+
 }
+    
