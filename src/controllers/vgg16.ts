@@ -1,10 +1,14 @@
-import { Curl } from "node-libcurl"
-import { JsonController } from "routing-controllers"
+import { Curl, curly } from "node-libcurl"
+import {  Get, HttpCode, JsonController, Res } from "routing-controllers"
+import { HttpStatus } from "../types/http";
+import { Response } from "koa";
 
 @JsonController("/vgg16")
 export class Vgg16Controller{
     
-    async test(){
+    @HttpCode(HttpStatus.success)
+    @Get()
+    async test(@Res() { ctx }: Response){
 
         const curl = new Curl();
 
@@ -18,8 +22,21 @@ export class Vgg16Controller{
             { name: 'test_input', file: photo_url }
         ]);
         
-        curl.on('end', close);
+       // const result = await curl.on('end', close);
+
+        const { statusCode, data, headers } = await curly(test_url, {
+            customRequest: 'POST',
+            httpHeader: ['Content-Type: application/json'],
+            postFields: JSON.stringify({ name: 'test_input', file: photo_url })
+        })
+
         curl.on('error', close);
+
+        ctx.body = {
+            data: data
+        }
+
+        return ctx;
     }
 
 }
