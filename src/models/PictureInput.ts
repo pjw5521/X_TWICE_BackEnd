@@ -64,7 +64,9 @@ export class PictureUpdateInput implements Partial<Picture> {
     @Length(5, 200)
     picture_info?: string;
 
-    user_num: number;
+    @IsOptional()
+    @IsInt()
+    user_num?: number;
     /* @IsHash("sha256")
     user_password: string; */ 
 

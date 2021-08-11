@@ -73,7 +73,7 @@ export class PictureController {
 
     // 사진 정보 수정하기
     @HttpCode(200)
-    @Authorized()
+    //@Authorized()
     @Put()
     @ResponseSchema(Picture, {
         statusCode: HttpStatus.success,
@@ -83,7 +83,8 @@ export class PictureController {
         statusCode: HttpStatus.bad_request,
     })
     @OpenAPI({
-        summary: "토큰 정보 수정",
+        summary: "토큰 정보 수정 & 토큰 구매하기",
+        description: "토큰 정보 수정 시에는 토큰 아이디와 수정할 정보들 전송, 토큰 구매 시에는 토큰 아이디만 전송",
         responses: {
             ...SuccessReponse,
             ...BadRequestResponse

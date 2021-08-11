@@ -1,4 +1,4 @@
-import { IsInt, IsOptional, IsString } from 'class-validator';
+import { IsInt, IsNumber, IsOptional, IsString } from 'class-validator';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { DataType } from '../types/database';
 import { History } from './History';
@@ -28,6 +28,14 @@ export class User {
   })
   @IsString()
   user_id: string;
+
+  @Column({
+    type: DataType.int,
+    name: "user_clay",
+    default: 100
+  })
+  @IsNumber()
+  user_clay: number;
 
   @Column({
     type: DataType.varchar,
