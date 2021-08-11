@@ -38,7 +38,7 @@ export class History {
   @Column({
     type: DataType.varchar,
     name: "picture_url",
-    length: 100,
+    length: 250,
   })
   @IsString()
   picture_url: string;
