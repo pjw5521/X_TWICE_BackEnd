@@ -28,7 +28,7 @@ export class PictureRepository extends Repository<Picture> {
         const picture: DeepPartial<Picture> = {
             token_id,
             picture_price,
-            picture_state: "N"
+            picture_state: "Y"
         };
 
         return await this.save(picture, { transaction: false, reload: false })
@@ -38,7 +38,7 @@ export class PictureRepository extends Repository<Picture> {
     async cancleSale(token_id: string){
         const picture: DeepPartial<Picture> = {
             token_id,
-            picture_state: "Y"
+            picture_state: "N"
         };
 
         return await this.save(picture, { transaction: false, reload: false })
