@@ -34,7 +34,7 @@ export class Vgg16Controller{
         /* const data = curl.on('end', close);
         curl.on('error', close); */
 
-        const data = await this.uploadImage(test_url, file_url);
+        const data = await this.uploadImage(test_url, this.fileToBlob(photo_file));
         console.log(data);
 
         ctx.body = {
@@ -46,15 +46,13 @@ export class Vgg16Controller{
 
 
     
-    uploadImage = (test_url: string, file: string) => new Promise((resolve, reject) => {
+    uploadImage = (test_url: string, file: any) => new Promise((resolve, reject) => {
         const curl = new Curl();
         const close = curl.close.bind(curl);
 
         curl.setOpt(Curl.option.URL, test_url);
     
-        curl.setOpt(Curl.option.HTTPPOST, [
-            { name: 'test_input', file: file }
-        ]);
+        curl.setOpt(Curl.option.POST, file);
 
         curl.on("end", (statusCode, data, headers) => {
             close();
@@ -69,5 +67,7 @@ export class Vgg16Controller{
 
         curl.perform();
     });
+
+    private fileToBlob = async (file) => new Blob([new Uint8Array(await file.arrayBuffer())], {type: file.type })
 
 }

@@ -10,15 +10,18 @@ export class HistoryRepository extends Repository<History> {
         return await this.insert(newValue);
     }
 
-    async getHistory(user_num1: number, query: GetPagnation) {
+    async getHistory(user_num: number, query: GetPagnation) {
         const alias = "history"
 
         const { first, last } = query;
 
         const qb = this.createQueryBuilder(alias) 
-            .where(`${alias}.user_num1 = :user_num1`)
+            .leftJoinAndSelect(`${alias}.user2`, "user2")
+            .leftJoinAndSelect(`${alias}.user1`, "user1")
+            .where(`${alias}.user_num1 = :user_num`)
+            .orWhere(`${alias}.user_num2 = :user_num`)
             .setParameters({ 
-                user_num1: user_num1
+                user_num: user_num
             })
             .skip(first)
             .take(last)
@@ -43,6 +46,5 @@ export class HistoryRepository extends Repository<History> {
 
         return await qb.getManyAndCount();
         // return await this.findOne(user_num);
-
     }
 }

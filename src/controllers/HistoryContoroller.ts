@@ -62,7 +62,7 @@ export class HistoryController {
 
     //거래 내역 확인하기 
     @HttpCode(200)
-    @Authorized()
+    //@Authorized()
     @Get()
     @ResponseSchema(History, {
         statusCode: HttpStatus.success,
@@ -83,14 +83,15 @@ export class HistoryController {
             ...BadRequestResponse
         },
     })
-    async getHistory(@CurrentUser() payload: TokenPayload,  @QueryParams() query: GetPagnation, @Res() { ctx }: Response) {
+    async getHistory(/*@CurrentUser() payload: TokenPayload, */ @QueryParams() query: GetPagnation, @Res() { ctx }: Response) {
         
-        const { user_num } = payload;
-        const corrent_user_num = user_num;
+        //const { user_num } = payload;
+        //const corrent_user_num = user_num;
+        const corrent_user_num = 28;
 
         const errors = await validate(query);
 
-            if (errors.length > 0) {
+        if (errors.length > 0) {
             throw new BadRequestError('잘못된 요청입니다')
          }
 
