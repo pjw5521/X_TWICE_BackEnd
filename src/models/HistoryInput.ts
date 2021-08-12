@@ -12,6 +12,9 @@ export class HistoryInsertInput implements Partial<History> {
     @IsString()
     picture_title: string;
 
+    @IsString()
+    token_id: string;
+
     @IsNumber()
     picture_price: number;
 

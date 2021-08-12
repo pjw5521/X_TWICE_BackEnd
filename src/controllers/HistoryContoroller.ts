@@ -1,5 +1,5 @@
 import { Response } from "koa";
-import { Authorized, Body, CurrentUser, Get, HttpCode, JsonController, Param, Post, QueryParams, Res } from "routing-controllers";
+import { Authorized, Body, CurrentUser, Get, HttpCode, JsonController, Param, Params, Post, QueryParams, Res } from "routing-controllers";
 import { getCustomRepository } from "typeorm";
 import { HistoryRepository } from "../repositories/HistoryRepository";
 import { HistoryInsertInput } from "../models/HistoryInput";
@@ -95,6 +95,40 @@ export class HistoryController {
          }
 
         const result = await this.historyRepo.getHistory(corrent_user_num, query);
+
+        const history  = result[0]
+        const count = result[1];
+    
+        ctx.body = {
+            data: {
+                items: history,
+                count
+            }
+        }
+    
+         return ctx;
+    }
+
+    //user2 정보 확인하기
+    @HttpCode(200)
+    @Authorized()
+    @Get("/user2")
+    @ResponseSchema(History, {
+        statusCode: HttpStatus.success,
+        isArray: true
+    })
+    @OpenAPI({
+        summary: "User2 정보 조회",
+        responses: {
+            ...SuccessReponse,
+        },
+    })
+    async getUser2(@CurrentUser() payload: TokenPayload, @Param('token_id') token_id : string, @Res() { ctx }: Response) {
+        
+        const { user_num } = payload;
+        const corrent_user_num = user_num;
+    
+        const result = await this.historyRepo.getUser2(corrent_user_num,token_id);
 
         const history  = result[0]
         const count = result[1];

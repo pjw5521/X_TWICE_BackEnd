@@ -38,7 +38,7 @@ export class History {
   @Column({
     type: DataType.varchar,
     name: "picture_url",
-    length: 1000,
+    length: 250,
   })
   @IsString()
   picture_url: string;
@@ -50,6 +50,14 @@ export class History {
   })
   @IsString()
   picture_title: string;
+
+  @Column({
+    type: DataType.varchar,
+    name: "token_id",
+    length: 100,
+  })
+  @IsString()
+  token_id: string;
 
   @Column({
     type: "int",

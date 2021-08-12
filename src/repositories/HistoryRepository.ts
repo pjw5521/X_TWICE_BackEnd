@@ -27,4 +27,22 @@ export class HistoryRepository extends Repository<History> {
         // return await this.findOne(user_num);
 
     }
+
+    async getUser2(user_num1: number, token_id : string) {
+        const alias = "history"
+
+        const qb = this.createQueryBuilder("history")
+            .leftJoinAndSelect("history.user2", "user2")
+            .where(`history.user_num1 = :user_num1`)
+            .andWhere(`token_id = :token_id`)
+            .andWhere(`user2.user_num = history.user_num2`)
+            .setParameters({ 
+                user_num1: user_num1,
+                token_id: token_id
+            })
+
+        return await qb.getManyAndCount();
+        // return await this.findOne(user_num);
+
+    }
 }
