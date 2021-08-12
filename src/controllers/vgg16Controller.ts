@@ -16,23 +16,26 @@ export class Vgg16Controller{
 
         const photo_file = file
         const test_url = "http://172.16.163.153:8081/predictions/densenet161"
+        const file_url = "https://firebasestorage.googleapis.com/v0/b/x-twice-2021.appspot.com/o/images%2Fimg1628675495434.jpg?alt=media&token=dea746e2-f8d6-48ed-b762-9f9a3936427a"
     
-        curl.setOpt(Curl.option.URL, test_url);
+        //curl.setOpt(Curl.option.URL, test_url);
         
-        curl.setOpt(Curl.option.HTTPPOST, [
+        /* curl.setOpt(Curl.option.HTTPPOST, [
             { name: 'test_input', file: 'https://firebasestorage.googleapis.com/v0/b/x-twice-2021.appspot.com/o/images%2Fimg1628675495434.jpg?alt=media&token=dea746e2-f8d6-48ed-b762-9f9a3936427a' }
-        ]);
+        ]); */
 
         
-  /*      const { statusCode, data, headers } = await curly(test_url, {
+        /*  const { statusCode, data, headers } = await curly(test_url, {
             customRequest: 'POST',
             httpHeader: ['Content-Type: application/json'],
             postFields: JSON.stringify({ name: 'test_input', file: photo_file })
-        })
-    */
+        }) */
         
-        const data =   curl.on('end', close);
-        curl.on('error', close);
+        /* const data = curl.on('end', close);
+        curl.on('error', close); */
+
+        const data = await this.uploadImage(test_url, file_url);
+        console.log(data);
 
         ctx.body = {
             data: data
@@ -40,5 +43,31 @@ export class Vgg16Controller{
 
         return ctx;
     }
+
+
+    
+    uploadImage = (test_url: string, file: string) => new Promise((resolve, reject) => {
+        const curl = new Curl();
+        const close = curl.close.bind(curl);
+
+        curl.setOpt(Curl.option.URL, test_url);
+    
+        curl.setOpt(Curl.option.HTTPPOST, [
+            { name: 'test_input', file: file }
+        ]);
+
+        curl.on("end", (statusCode, data, headers) => {
+            close();
+            console.log(data);
+            resolve(data)
+        })
+        curl.on("error", (error) => {
+            close();
+            console.log(error);
+            reject(error);
+        })
+
+        curl.perform();
+    });
 
 }
