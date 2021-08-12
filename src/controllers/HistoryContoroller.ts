@@ -62,7 +62,7 @@ export class HistoryController {
 
     //거래 내역 확인하기 
     @HttpCode(200)
-    //@Authorized()
+    @Authorized()
     @Get()
     @ResponseSchema(History, {
         statusCode: HttpStatus.success,
@@ -83,11 +83,10 @@ export class HistoryController {
             ...BadRequestResponse
         },
     })
-    async getHistory(/*@CurrentUser() payload: TokenPayload, */ @QueryParams() query: GetPagnation, @Res() { ctx }: Response) {
+    async getHistory(@CurrentUser() payload: TokenPayload, @QueryParams() query: GetPagnation, @Res() { ctx }: Response) {
         
-        //const { user_num } = payload;
-        //const corrent_user_num = user_num;
-        const corrent_user_num = 28;
+        const { user_num } = payload;
+        const corrent_user_num = user_num;
 
         const errors = await validate(query);
 
@@ -109,7 +108,7 @@ export class HistoryController {
     
          return ctx;
     }
-
+/*
     //user2 정보 확인하기
     @HttpCode(200)
     @Authorized()
@@ -143,6 +142,7 @@ export class HistoryController {
     
          return ctx;
     }
+*/
 
 }
     

@@ -23,6 +23,7 @@ export class HistoryRepository extends Repository<History> {
             .setParameters({ 
                 user_num: user_num
             })
+            .orderBy(`${alias}.createdAt`, "DESC")
             .skip(first)
             .take(last)
         
