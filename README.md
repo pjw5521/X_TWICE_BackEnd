@@ -15,19 +15,28 @@
 
 ## 실행 명령어
 - `npm run dev` : 개발 환경으로 실행
-- `npm build` : build 파일 생성
+- `npm run start` : pm2로 실행
+- `npm run restart` : 기존 pm2 프로세스 삭제 후 재실행 
+- `npm run build` : build 파일 생성
+- `npm run rebuild` : 기존 build 파일 삭제 후 재생성 
 
 ## 디렉터리 및 파일
 - `build` : 운영 환경이나 테스트 환경에서 배포
 - `src` : 소스 코드 
     - `index.ts` : 서버 실행 ts 파일
     - `env.ts` : 환경변수 ts 파일
+    - `configs` : Typeorm 설정 관련 디렉터리
     - `entities` : Entity 관련 디렉터리
     - `controllers` : Controller 관련 디렉터리
+    - `middlewares` : Middleware 관련 디렉터리
+    - `models` : validation 관련 디렉터리
+    - `types` : Data, HttpStatus, Swagger, Jsonwebtoken 관련 type 정의 디렉터리
+    - `utils` : Jsonwebtoken 관련 디렉터리
 - `.env` : 전역 환경 변수들(누출 유의, 누출 시 신속하게 변경 바람)
     ```
     NODE_ENV=현재 환경 변수 - production(프로덕션용), develop(개발용), test(테스트용)
     DB_HOST=DBMS 접속 경로
+    DB_PORT=DBMS 접속 포트 번호
     DB_USERNAME=DBMS 접속 유저명
     DB_PASSWORD=DBMS 접속 비밀번호
     DB_DATABASE=DBMS 접속 데이터베이스명
@@ -37,7 +46,12 @@
 - `package.json` : npm 패키지 설정 파일
 - `package.json.lock` : npm 패키지의 Lock 파일, 버전의 업그레이드 및 다운그레이드를 설치 때마다 Lock을 걸음
 - `tsconfig.json` : Typescript 설정 파일
-
+- `ecosystem.config.js` : pm2 실행 환경 설정 파일
+   ```
+   name : 프로세스 이름
+   script : 실행시킬 파일 경로
+   env : 배포 환경
+   ```
 <br>
 <hr>
 <br>
@@ -53,6 +67,20 @@
 2. `sudo apt install nodejs` 으로 node js 설치
 3. `node -v`로 NodeJS 버전 확인하고, `npm -v`으로 NPM 버전 확인
 4. `sudo npm install -g yarn pm2`으로 전역으로 Yarn과 PM2를 설치
+
+## 특정 Port 오픈 시
+- `sudo iptables -I INPUT 1 -p tcp --dport 포트번호 -j ACCEPT` : 외부에서 내부로 들어오는 TCP 포트번호를 1번 방확벽 규칙으로 추가
+
+## 오픈되어 있는 Port 확인 시
+- `netstat -nap` : 열려있는 port 리스트 출력 
+
+## torchserve 외부 접속 허용 Port 오픈 시 
+1. TorchServe용 구성 파일인 config.properties(기본 이름)를 생성하여 원격 접속 주소 설정
+  ```
+  inference_address = Inference API 바인딩 주소. Default: http://127.0.0.1:8080
+  management_address = Management API 바인딩 주소. Default: http://127.0.0.1:8081
+  ```
+2. torchserve 실행 시 같은 디렉토리에서 실행하거나 --ts-config으로 경로 지정 
 
 <br>
 <hr>
@@ -81,3 +109,8 @@
 - test : 개발용 DB
     - devadmin : CREATE, ALTER, DROP, INSERT, UPDATE, DELETE, SELECT
     - devtest : INSERT, UPDATE, DELETE, SELECT
+
+## mysql port open 시 
+1. `sudo nano /etc/mysql/my.cnf` 또는 `sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf`으로 mysql 설정 관련 cnf 파일 오픈 
+2. `bind-address = 127.0.0.1`, `mysqlx-bind-address = 127.0.0.1` 주석 처리 
+3. `sudo service mysql restart`으로 mysql 재시작 
