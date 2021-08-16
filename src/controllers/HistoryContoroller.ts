@@ -22,6 +22,7 @@ export class HistoryController {
 
     //거래내역 등록하기
     @HttpCode(200)
+    @Authorized()
     @Post()
     @ResponseSchema(History, {
         statusCode: HttpStatus.success,
@@ -41,9 +42,9 @@ export class HistoryController {
             ...BadRequestResponse
         },
     })
-    async register(@Body() history: HistoryInsertInput/*, @CurrentUser() payload: TokenPayload,*/, @Res() { ctx }: Response) {
-        //onst { user_num } = payload;
-        history.user_num1 = 28
+    async register(@Body() history: HistoryInsertInput, @CurrentUser() payload: TokenPayload, @Res() { ctx }: Response) {
+        const { user_num } = payload;
+        history.user_num1 = user_num;
         
         const errors = await validate(history);
 
