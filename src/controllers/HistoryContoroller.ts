@@ -20,7 +20,8 @@ export class HistoryController {
         this.historyRepo = getCustomRepository(HistoryRepository);
     }
 
-    //거래내역 등록하기
+    //거래내역 등록하기 
+    // user_num1은 판매하는 사람, user_num2는 구매하는 사람
     @HttpCode(200)
     @Authorized()
     @Post()
@@ -35,7 +36,8 @@ export class HistoryController {
         statusCode: HttpStatus.bad_request,
     })
     @OpenAPI({
-        summary: "토큰 등록",
+        summary: "거래 내역 등록",
+        description:"보내줘야 하는 내용은 picture_url, picture_title, token_id, picture_price, user_num1입니다. user_num1은 판매하는 사람, user_num2는 구매하는 사람",
         responses: {
             ...SuccessReponse,
             ...NotFoundResponse,
@@ -44,7 +46,7 @@ export class HistoryController {
     })
     async register(@Body() history: HistoryInsertInput, @CurrentUser() payload: TokenPayload, @Res() { ctx }: Response) {
         const { user_num } = payload;
-        history.user_num1 = user_num;
+        history.user_num2 = user_num;
         
         const errors = await validate(history);
 

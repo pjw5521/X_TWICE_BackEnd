@@ -4,7 +4,7 @@ import { History } from "../entities/History";
 export class HistoryInsertInput implements Partial<History> {
 
     @IsNumber()
-    user_num2:number;
+    user_num1:number;
 
     @IsString()
     picture_url: string;
@@ -18,6 +18,6 @@ export class HistoryInsertInput implements Partial<History> {
     @IsNumber()
     picture_price: number;
 
-    user_num1: number;
+    user_num2: number;
     
 }
