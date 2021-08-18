@@ -4,25 +4,24 @@ import { Response } from "koa";
 import { HttpStatus } from "../types/http";
 import axios, {} from "axios"
 import FormData from "form-data";
-import fs from "fs"
+import fs from "fs";
+import { Multer } from "multer";
 
 @JsonController("/vgg16")
 export class Vgg16Controller{
     
     @HttpCode(HttpStatus.success)
-    @Post()
-    async uploadFile(@UploadedFile("file") file: any,@Res() { ctx }: Response){
+    @Post("", { transformRequest: true })
+    async uploadFile(@UploadedFile("file") file: any, @Res() { ctx }: Response){
 
         const curl = new Curl();
 
         const close = curl.close.bind(curl);
 
-       // const photo_file = file as File
         const photo_file = "./kitten_small.jpg"
-        const test_url = "http://172.16.163.153:8081/predictions/densenet161"
-        const file_url = "https://firebasestorage.googleapis.com/v0/b/x-twice-2021.appspot.com/o/images%2Fimg1628675495434.jpg?alt=media&token=dea746e2-f8d6-48ed-b762-9f9a3936427a"
-    
-        const stream = fs.createWriteStream(photo_file)
+        const test_url = "http://172.16.163.153:5000/predict"
+        const photo_url = 'https://firebasestorage.googleapis.com/v0/b/x-twice-2021.appspot.com/o/images%2Fimg1628675495434.jpg?alt=media&token=dea746e2-f8d6-48ed-b762-9f9a3936427a'
+        // const stream = fs.createWriteStream(photo_file)
         //curl.setOpt(Curl.option.URL, test_url);
         
         /* curl.setOpt(Curl.option.HTTPPOST, [
@@ -43,15 +42,37 @@ export class Vgg16Controller{
         console.log(data);
         */
 
-        console.log(file);
+        // console.log(file);
+
+        const { buffer, originalname: filename } = file
 
         const formData = new FormData();
         // formData.append('files', FileReader.readAsDataURL(file as File));
-        formData.append('file', file)
+        formData.append("file", buffer, filename)
 
+        // console.log(formData)
+
+        /* const data =  axios({
+            method: "post",
+            url: test_url,
+            data: formData,
+            headers: { "Content-Type": "multipart/form-data" },
+          })
+            .then(function (response) {
+              //handle success
+              console.log(response);
+            })
+            .catch(function (response) {
+              //handle error
+              console.log(response);
+            }); */
+        //console.log(formData.getHeaders());
+        //const headers = formData.getHeaders();
         const data = await axios.post(test_url, formData, {
-            headers :{
-                'Content-Type' : 'multipart/form-data'
+            headers: {
+                // ...formData.getHeaders(),
+                // "Content-Length": formData.getLengthSync(),
+                "Content-Type": "multipart/form-data"
             }
         })
         
@@ -63,8 +84,6 @@ export class Vgg16Controller{
         return ctx;
     }
 
-
-    
     private uploadImage = (test_url: string, file: any) => new Promise((resolve, reject) => {
         const curl = new Curl();
         const close = curl.close.bind(curl);

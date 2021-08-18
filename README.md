@@ -52,6 +52,7 @@
    script : 실행시킬 파일 경로
    env : 배포 환경
    ```
+   
 <br>
 <hr>
 <br>
@@ -109,6 +110,7 @@
 - test : 개발용 DB
     - devadmin : CREATE, ALTER, DROP, INSERT, UPDATE, DELETE, SELECT
     - devtest : INSERT, UPDATE, DELETE, SELECT
+- root : 
 
 ## mysql port open 시 
 1. `sudo nano /etc/mysql/my.cnf` 또는 `sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf`으로 mysql 설정 관련 cnf 파일 오픈 
