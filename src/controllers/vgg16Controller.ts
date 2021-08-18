@@ -76,7 +76,6 @@ export class Vgg16Controller{
             }
         })
         
-
         ctx.body = {
             data: data
         }

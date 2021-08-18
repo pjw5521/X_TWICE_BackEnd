@@ -69,6 +69,10 @@
 3. `node -v`로 NodeJS 버전 확인하고, `npm -v`으로 NPM 버전 확인
 4. `sudo npm install -g yarn pm2`으로 전역으로 Yarn과 PM2를 설치
 
+## Gunicorn 실행 
+1. `pip install gunicorn`으로 gunicorn 설치
+2. `gunicorn 실행파일명:app -b 0.0.0.0`으로 실행. defalt port 번호는 8000으로 모든 아이피에 대해 8000 port 접속 허용.
+
 ## 특정 Port 오픈 시
 - `sudo iptables -I INPUT 1 -p tcp --dport 포트번호 -j ACCEPT` : 외부에서 내부로 들어오는 TCP 포트번호를 1번 방확벽 규칙으로 추가
 
