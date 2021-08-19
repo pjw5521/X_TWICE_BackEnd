@@ -4,7 +4,6 @@
 - 언어 : Typescript
 - 웹서버 : Koa
 - DBMS, ORM : mysql, TypeORM
-- GraphQL : TypeGraphQL, Apollo Server
 - 인증 : jsonwebtoken
 
 ## 인증 처리
@@ -71,7 +70,7 @@
 
 ## Gunicorn 실행 
 1. `pip install gunicorn`으로 gunicorn 설치
-2. `gunicorn 실행파일명:app -b 0.0.0.0`으로 실행. defalt port 번호는 8000으로 모든 아이피에 대해 8000 port 접속 허용.
+2. `gunicorn 실행파일명:app -b 0.0.0.0 --daemon`으로 실행. defalt port 번호는 8000으로 모든 아이피에 대해 8000 port 접속 허용.
 
 ## 특정 Port 오픈 시
 - `sudo iptables -I INPUT 1 -p tcp --dport 포트번호 -j ACCEPT` : 외부에서 내부로 들어오는 TCP 포트번호를 1번 방확벽 규칙으로 추가
@@ -86,6 +85,9 @@
   management_address = Management API 바인딩 주소. Default: http://127.0.0.1:8081
   ```
 2. torchserve 실행 시 같은 디렉토리에서 실행하거나 --ts-config으로 경로 지정 
+
+## 포트 프로세스 충돌 시
+- ``sudo kill -9 `sudo lsof -t -i:포트번호`` : 포토번호와 관련된 모든 프로세스를 종료
 
 <br>
 <hr>
@@ -107,14 +109,9 @@
 - collation_server : utf8mb4_unicode_ci
 - time_zone : Asia/Seoul
 
-## 포트 프로세스 충돌 시
-- ``sudo kill -9 `sudo lsof -t -i:포트번호`` : 포토번호와 관련된 모든 프로세스를 종료
-
 ## DB별 계정 권한
 - test : 개발용 DB
-    - devadmin : CREATE, ALTER, DROP, INSERT, UPDATE, DELETE, SELECT
-    - devtest : INSERT, UPDATE, DELETE, SELECT
-- root : 
+    - root : 모든 권한
 
 ## mysql port open 시 
 1. `sudo nano /etc/mysql/my.cnf` 또는 `sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf`으로 mysql 설정 관련 cnf 파일 오픈 
