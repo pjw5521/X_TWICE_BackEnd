@@ -71,7 +71,7 @@
 ## Gunicorn 실행 
 1. `pip install gunicorn`으로 gunicorn 설치
 2. `gunicorn server:app -b 0.0.0.0 --daemon --access-logfile ./gunicorn-access.log --error-logfile ./gunicorn-error.log`으로 실행. 
-    defalt port 번호는 8000으로 모든 아이피에 대해 8000 port 접속 허용.
+    defalt port 번호는 8000으로 모든 아이피에 대해 8000 port 접속 허용. reload 시 같은 명령어 사용 가능.
 - `pkill gunicorn` : gunicorn 프로세스 종료
 - `./gunicorn-access.log`, `./gunicorn-error.log` 위치에서 access, error log 확인 가능
 
