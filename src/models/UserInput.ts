@@ -5,7 +5,6 @@ export class UserInsertInput implements Partial<User> {
 
     /* @IsInt()
     user_num: number;
-
     ;  */
 
     @IsString()
@@ -16,8 +15,11 @@ export class UserInsertInput implements Partial<User> {
     @Length(5, 255, { each: true })
     user_account: string;
 
-    /* @IsHash("sha256")
-    user_password: string; */ 
+    @IsHash("sha256")
+    user_password: string;
+
+    @IsHash("sha256")
+    user_privatekey: string;
 
 }
 
