@@ -70,7 +70,10 @@
 
 ## Gunicorn 실행 
 1. `pip install gunicorn`으로 gunicorn 설치
-2. `gunicorn 실행파일명:app -b 0.0.0.0 --daemon`으로 실행. defalt port 번호는 8000으로 모든 아이피에 대해 8000 port 접속 허용.
+2. `gunicorn server:app -b 0.0.0.0 --daemon --access-logfile ./gunicorn-access.log --error-logfile ./gunicorn-error.log`으로 실행. 
+    defalt port 번호는 8000으로 모든 아이피에 대해 8000 port 접속 허용.
+- `pkill gunicorn` : gunicorn 프로세스 종료
+- `./gunicorn-access.log`, `./gunicorn-error.log` 위치에서 access, error log 확인 가능
 
 ## 특정 Port 오픈 시
 - `sudo iptables -I INPUT 1 -p tcp --dport 포트번호 -j ACCEPT` : 외부에서 내부로 들어오는 TCP 포트번호를 1번 방확벽 규칙으로 추가
