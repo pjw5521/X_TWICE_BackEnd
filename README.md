@@ -68,26 +68,11 @@
 3. `node -v`로 NodeJS 버전 확인하고, `npm -v`으로 NPM 버전 확인
 4. `sudo npm install -g yarn pm2`으로 전역으로 Yarn과 PM2를 설치
 
-## Gunicorn 실행 
-1. `pip install gunicorn`으로 gunicorn 설치
-2. `gunicorn server:app -b 0.0.0.0 --daemon --access-logfile ./gunicorn-access.log --error-logfile ./gunicorn-error.log`으로 실행. 
-    defalt port 번호는 8000으로 모든 아이피에 대해 8000 port 접속 허용. reload 시 같은 명령어 사용 가능.
-- `pkill gunicorn` : gunicorn 프로세스 종료
-- `./gunicorn-access.log`, `./gunicorn-error.log` 위치에서 access, error log 확인 가능
-
 ## 특정 Port 오픈 시
-- `sudo iptables -I INPUT 1 -p tcp --dport 포트번호 -j ACCEPT` : 외부에서 내부로 들어오는 TCP 포트번호를 1번 방확벽 규칙으로 추가
+- `sudo iptables -I INPUT 1 -p tcp --dport 포트번호 -j ACCEPT` : 외부에서 내부로 들어오는 TCP 포트번호를 1번 방화벽 규칙으로 추가
 
 ## 오픈되어 있는 Port 확인 시
 - `netstat -nap` : 열려있는 port 리스트 출력 
-
-## torchserve 외부 접속 허용 Port 오픈 시 
-1. TorchServe용 구성 파일인 config.properties(기본 이름)를 생성하여 원격 접속 주소 설정
-  ```
-  inference_address = Inference API 바인딩 주소. Default: http://127.0.0.1:8080
-  management_address = Management API 바인딩 주소. Default: http://127.0.0.1:8081
-  ```
-2. torchserve 실행 시 같은 디렉토리에서 실행하거나 --ts-config으로 경로 지정 
 
 ## 포트 프로세스 충돌 시
 - ``sudo kill -9 `sudo lsof -t -i:포트번호`` : 포토번호와 관련된 모든 프로세스를 종료
