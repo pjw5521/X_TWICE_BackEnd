@@ -5,7 +5,7 @@ import { HistoryRepository } from "../repositories/HistoryRepository";
 import { HistoryInsertInput } from "../models/HistoryInput";
 import { TokenPayload } from "../types/tokens";
 import { validate } from "class-validator";
-import { BadRequestError, HttpError, NotFoundError } from "../error";
+import { BadRequestError, HttpError } from "../error";
 import { OpenAPI, ResponseSchema } from "routing-controllers-openapi";
 import { HttpStatus } from "../types/http";
 import { BadRequestResponse, NotFoundResponse, SuccessReponse } from "../types/swagger";

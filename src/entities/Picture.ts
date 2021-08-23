@@ -94,6 +94,21 @@ export class Picture {
   @IsInt()
   user_num: number;
 
+  @Column({
+    type: DataType.text,
+    name: "picture_vector"
+  })
+  @IsString()
+  picture_vector: string;
+
+  @Column({
+    type: DataType.int,
+    name: "picture_norm"
+  })
+  @IsInt()
+  picture_norm: number;
+
+
   @ManyToOne(() => User, user => user.pictures)
   @JoinColumn({ name: "user_num", referencedColumnName: "user_num"})
   user: User;

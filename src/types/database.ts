@@ -2,5 +2,6 @@ export enum DataType {
     int = "int",
     varchar = "varchar",
     date = "date",
-    boolean="boolean"
+    boolean="boolean",
+    text="text"
 }

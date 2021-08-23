@@ -105,3 +105,10 @@
 1. `sudo nano /etc/mysql/my.cnf` 또는 `sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf`으로 mysql 설정 관련 cnf 파일 오픈 
 2. `bind-address = 127.0.0.1`, `mysqlx-bind-address = 127.0.0.1` 주석 처리 
 3. `sudo service mysql restart`으로 mysql 재시작 
+
+## mysql 접속 
+- `sudo mysql -u root -p` : mysql에 root로 접속 
+
+## mysql 사용자 조회
+1. `use mysql`
+2. `select user, host from user`  
