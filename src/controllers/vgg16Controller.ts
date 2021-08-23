@@ -5,9 +5,12 @@ import FormData from "form-data";
 import fetch from "node-fetch";
 import { PictureVectorInput } from "../models/PictureInput";
 import { validate } from "class-validator";
-import { BadRequestError } from "../error";
+import { BadRequestError, HttpError } from "../error";
 import { PictureRepository } from "../repositories/PictureRepository";
 import { getCustomRepository } from "typeorm";
+import { OpenAPI, ResponseSchema } from "routing-controllers-openapi";
+import { Picture } from "../entities/Picture";
+import { BadRequestResponse, SuccessReponse } from "../types/swagger";
 
 @JsonController("/vgg16")
 export class Vgg16Controller{
@@ -21,6 +24,10 @@ export class Vgg16Controller{
     // 사진을 post
     @HttpCode(HttpStatus.success)
     @Post()
+    @OpenAPI({
+        summary: "유사도 검사하기",
+        description: "사진을 전송하면 유사도 검사 결과를 리턴",
+    })
     async uploadFile(@UploadedFile("file") file: any, @Res() { ctx }: Response){
         const test_url = "http://172.16.163.153:8000/predict"
 
@@ -49,9 +56,23 @@ export class Vgg16Controller{
 
     // vector, norm 값 저장하기
     // 유사도 검사 결과, vector, norm 값을 받음. vector와 norm db에 저장하기 
-    // 근데 token_id를 어떻게 받지 ????????????????????
     @HttpCode(HttpStatus.success)
     @Post("/vector")
+    @ResponseSchema(Picture, {
+        statusCode: HttpStatus.success,
+        isArray: true
+    })
+    @ResponseSchema(HttpError, {
+        statusCode: HttpStatus.bad_request,
+    })
+    @OpenAPI({
+        summary: "picture의 vector, norm 저장하기",
+        description: "해당 token_id의 vector, norm 저장",
+        responses: {
+            ...SuccessReponse,
+            ...BadRequestResponse
+        }
+    })
     async insertVector(@Param('token_id') token_id: string, @QueryParams() query: PictureVectorInput, @Res() { ctx }: Response ){
         const errors = await validate(query);
 
