@@ -4,7 +4,7 @@ import { QueryPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 import { Picture } from "../entities/Picture";
 import { BadRequestError } from "../error";
 import { GetPagnation } from "../models/PageQuery";
-import { PictureInsertInput, PictureSaleInput, PictureUpdateInput, ViewBycategoryQuery } from "../models/PictureInput";
+import { PictureInsertInput, PictureSaleInput, PictureUpdateInput, PictureVectorInput, ViewBycategoryQuery } from "../models/PictureInput";
 import { GetMyListQuery } from "../models/PictureQuery";
 
 @EntityRepository(Picture)
@@ -15,7 +15,20 @@ export class PictureRepository extends Repository<Picture> {
         return await this.insert(newValue);
     }
 
-     // 사진 업데이트하기
+    // picture_vector, picture_norm 저장하기
+    async insertVector(token_id: string, newValue: PictureVectorInput){
+        const { picture_vector, picture_norm} = newValue;
+
+        const picture: DeepPartial<Picture> = {
+            token_id,
+            picture_vector,
+            picture_norm
+        };
+
+        return await this.save(picture, { transaction: false, reload: false })
+    }
+
+    // 사진 업데이트하기
     async saveWithOptions(newValue: PictureUpdateInput){
         return await this.save(newValue,{ transaction: false, reload: false });
     }

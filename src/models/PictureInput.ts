@@ -89,3 +89,13 @@ export class ViewBycategoryQuery extends GetPagnation {
     category?: string = "test";
     
 }
+
+export class PictureVectorInput{
+
+    @IsString()
+    picture_vector: string;
+
+    @IsInt()
+    picture_norm: number;
+    
+}

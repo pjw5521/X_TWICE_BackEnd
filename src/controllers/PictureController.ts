@@ -73,7 +73,7 @@ export class PictureController {
 
     // 사진 정보 수정하기
     @HttpCode(200)
-    //@Authorized()
+    @Authorized()
     @Put()
     @ResponseSchema(Picture, {
         statusCode: HttpStatus.success,
