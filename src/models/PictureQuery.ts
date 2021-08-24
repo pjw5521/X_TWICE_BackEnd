@@ -1,4 +1,4 @@
-import { IsBoolean, IsIn, IsNumber, IsOptional, IsString } from "class-validator";
+import { IsOptional, IsString } from "class-validator";
 import { GetPagnation } from "./PageQuery";
 
 export class GetMyListQuery extends GetPagnation{

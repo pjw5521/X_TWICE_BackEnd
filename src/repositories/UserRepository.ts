@@ -1,11 +1,8 @@
-import { validate } from "class-validator";
 import { EntityRepository, Repository } from "typeorm";
 import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 import { User } from "../entities/User";
 import { BadRequestError } from "../error";
-import { GetPagnation } from "../models/PageQuery";
 import { UserInsertInput, UserUpdateInput } from "../models/UserInput";
-import { GetMyListQuery } from "../models/PictureQuery";
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {

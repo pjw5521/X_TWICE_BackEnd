@@ -1,4 +1,4 @@
-import { IsIn, IsInt, IsOptional, IsString } from 'class-validator';
+import { IsInt, IsOptional, IsString } from 'class-validator';
 import { Entity, Column, ManyToOne, OneToMany, PrimaryColumn, JoinColumn } from 'typeorm';
 import { DataType } from '../types/database';
 import { Picture_object } from './Picture_object';
@@ -96,14 +96,17 @@ export class Picture {
 
   @Column({
     type: DataType.text,
-    name: "picture_vector"
+    name: "picture_vector",
+    nullable: true
+
   })
   @IsString()
   picture_vector: string;
 
   @Column({
     type: DataType.int,
-    name: "picture_norm"
+    name: "picture_norm",
+    nullable: true
   })
   @IsInt()
   picture_norm: number;

@@ -1,4 +1,4 @@
-import { IsInt, IsString, IsOptional, Length, IsNumber } from "class-validator";
+import { IsString, IsNumber } from "class-validator";
 import { History } from "../entities/History";
 
 export class HistoryInsertInput implements Partial<History> {

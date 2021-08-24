@@ -1,4 +1,4 @@
-import { IsHash, IsInt, IsString, Length, ValidateIf } from "class-validator";
+import { IsHash, IsString, Length, ValidateIf } from "class-validator";
 import { User } from "../entities/User";
 
 export class UserInsertInput implements Partial<User> {

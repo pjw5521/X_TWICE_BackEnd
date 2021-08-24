@@ -1,8 +1,6 @@
-import { validate } from "class-validator";
 import { DeepPartial, EntityRepository, Repository } from "typeorm";
 import { QueryPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 import { Picture } from "../entities/Picture";
-import { BadRequestError } from "../error";
 import { GetPagnation } from "../models/PageQuery";
 import { PictureInsertInput, PictureSaleInput, PictureUpdateInput, PictureVectorInput, ViewBycategoryQuery } from "../models/PictureInput";
 import { GetMyListQuery } from "../models/PictureQuery";

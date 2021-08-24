@@ -6,7 +6,6 @@ import { Action, getMetadataArgsStorage, RoutingControllersOptions, useKoaServer
 import { env } from "./env";
 import { authorizationCheker, currentUserChecker, CustomErrorHandler } from "./middlewares/ErrorHandler";
 import * as dotenv from "dotenv";
-import { TokenUtil } from "./utils/TokenUtil";
 import cors from "@koa/cors"
 import { validationMetadatasToSchemas } from "class-validator-jsonschema";
 import { routingControllersToSpec } from "routing-controllers-openapi";
