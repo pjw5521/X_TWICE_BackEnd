@@ -104,7 +104,7 @@ export class Picture {
   picture_vector: string;
 
   @Column({
-    type: DataType.int,
+    type: DataType.float,
     name: "picture_norm",
     nullable: true
   })

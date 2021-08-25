@@ -3,5 +3,6 @@ export enum DataType {
     varchar = "varchar",
     date = "date",
     boolean="boolean",
-    text="text"
+    text="text",
+    float = "float"
 }
