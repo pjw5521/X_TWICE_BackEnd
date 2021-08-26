@@ -51,7 +51,7 @@ export class User {
     name: "user_privatekey",
     length: 255,
     default : "test",
-    select: false
+    // select: true
   })
   user_privatekey: string;
 
