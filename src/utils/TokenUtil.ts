@@ -6,10 +6,10 @@ import { TokenClaims, TokenPayload } from "../types/tokens";
 export class TokenUtil {
     
     async signToken(user: User) {
-        const { user_id, user_num, user_account } = user
+        const { user_id, user_num, user_account, user_privatekey } = user
 
         const claims: TokenClaims = {
-            user_id, user_num, user_account
+            user_id, user_num, user_account, user_privatekey
         };
 
         const signKey = "X_TWICE_BACKEND";
