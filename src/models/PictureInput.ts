@@ -34,7 +34,7 @@ export class PictureInsertInput implements Partial<Picture> {
 export class PictureUpdateInput implements Partial<Picture> {
    
     @IsString()
-    @Length(5, 255)
+    //@Length(5, 255)
     token_id?: string;
 
     @IsOptional()
@@ -98,4 +98,8 @@ export class PictureVectorInput{
     @IsNumber()
     picture_norm: number;
     
+}
+
+function IsPositiveFloat() {
+    throw new Error("Function not implemented.");
 }

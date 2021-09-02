@@ -75,7 +75,7 @@ export class Picture {
   @Column({
     type: DataType.float,
     name: "picture_price",
-    default: 0
+    default: 0.0
   })
   @IsOptional()
   picture_price: number;
