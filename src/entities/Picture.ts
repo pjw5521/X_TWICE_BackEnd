@@ -73,7 +73,7 @@ export class Picture {
   picture_info: string;
 
   @Column({
-    type: DataType.int,
+    type: DataType.float,
     name: "picture_price",
     default: 0
   })
@@ -98,7 +98,6 @@ export class Picture {
     type: DataType.text,
     name: "picture_vector",
     nullable: true
-
   })
   @IsString()
   picture_vector: string;

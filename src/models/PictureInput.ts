@@ -1,4 +1,4 @@
-import { IsInt, IsString, IsOptional, Length } from "class-validator";
+import { IsInt, IsString, IsOptional, Length, IsNumber } from "class-validator";
 import { Picture } from "../entities/Picture";
 import { GetPagnation } from "./PageQuery";
 
@@ -77,7 +77,7 @@ export class PictureSaleInput implements Partial<Picture> {
     @IsString()
     token_id: string;
 
-    @IsInt()
+    @IsNumber()
     picture_price: number;  
 
 }
@@ -95,7 +95,7 @@ export class PictureVectorInput{
     @IsString()
     picture_vector: string;
 
-    @IsInt()
+    @IsNumber()
     picture_norm: number;
     
 }
