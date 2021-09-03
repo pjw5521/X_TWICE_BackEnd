@@ -15,8 +15,8 @@ export class UserInsertInput implements Partial<User> {
     @Length(5, 255, { each: true })
     user_account: string;
 
-    /*@IsHash("sha256")
-    user_password: string;*/
+    @IsHash("sha256")
+    user_password: string;
 
     @IsHash("sha256")
     user_privatekey: string;
@@ -41,7 +41,7 @@ export class UserLoginInput implements Partial<User> {
     user_id: string; 
 
     //@IsHash("sha256")
-    @IsString()
+    @IsHash("sha256")
     user_password: string; 
 
 }

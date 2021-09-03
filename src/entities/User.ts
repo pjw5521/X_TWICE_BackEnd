@@ -1,4 +1,4 @@
-import { IsInt, IsNumber, IsString } from 'class-validator';
+import { IsHash, IsInt, IsNumber, IsString } from 'class-validator';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { DataType } from '../types/database';
 import { History } from './History';
@@ -42,7 +42,6 @@ export class User {
     name: "user_password",
     length: 255,
     default : "test",
-    select: false
   })
   user_password: string;
   
