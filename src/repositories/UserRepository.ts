@@ -37,15 +37,17 @@ export class UserRepository extends Repository<User> {
         return await qb.getOne();
     }
 
-    async getOneById(user_id: string) {
+    async getOneById(user_id: string, user_password: string) {
         
         const user = 'user';
 
         const params: QueryDeepPartialEntity<User> = {};
         params.user_id = user_id;
+        params.user_password = user_password
         
         const qb = this.createQueryBuilder(user)
             .where(`${user}.user_id = :user_id`)
+            .andWhere(`${user}.user_password = :user_password`)
             .setParameters(params);
 
         return await qb.getOne();

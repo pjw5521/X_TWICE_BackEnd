@@ -145,9 +145,9 @@ export class UserController {
             throw new BadRequestError('잘못된 요청입니다')
         }
         
-        const { user_id } = userInput;
+        const { user_id, user_password } = userInput;
 
-        const user = await this.userRepo.getOneById(user_id);
+        const user = await this.userRepo.getOneById(user_id, user_password);
 
         if (!user) {
             throw new NotFoundError("요청하신 결과가 없습니다.")
