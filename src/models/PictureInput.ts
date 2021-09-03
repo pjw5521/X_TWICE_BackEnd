@@ -25,6 +25,12 @@ export class PictureInsertInput implements Partial<Picture> {
     @IsString()
     picture_info: string;
 
+    @IsString()
+    picture_vector: string;
+
+    @IsNumber()
+    picture_norm: number;
+
     user_num: number;
     /* @IsHash("sha256")
     user_password: string; */ 
