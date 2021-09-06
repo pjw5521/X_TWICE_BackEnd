@@ -463,30 +463,28 @@ export class PictureController {
       }
       
     @HttpCode(200)
-    @Get("/userid")
+    @Get("/:token_id")
     @ResponseSchema(Picture, {
         statusCode: HttpStatus.success,
-        isArray: true
+        isArray: true,
     })
     @OpenAPI({
         summary: "user account 조회",
         description: "해당 token_id에 대한 user account 정보를 조회합니다.",
         responses: {
-            ...SuccessReponse,
-            ...NotFoundResponse,
-            ...BadRequestResponse
+            ...SuccessReponse
         },
     })
     async getUserId(@Param('token_id') token_id: string, @Res() { ctx }: Response) {
 
-        const pictures = await this.pictureRepo.getUserId(token_id);
+        const results = await this.pictureRepo.getUserId(token_id);
   
         ctx.body = {
-            data: pictures
+            data: results
         }
   
-          return ctx;
-      }
+        return ctx;
+    }
 
 
 }
