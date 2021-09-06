@@ -60,7 +60,7 @@ export class History {
   token_id: string;
 
   @Column({
-    type: "int",
+    type: DataType.float,
     name: "picture_price",
   })
   @IsInt()

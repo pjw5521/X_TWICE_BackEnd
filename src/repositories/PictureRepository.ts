@@ -180,4 +180,19 @@ export class PictureRepository extends Repository<Picture> {
         return await qb.execute();
     }
 
+    async getUserId(token_id: string){   
+
+        const qb = this.createQueryBuilder("picture")
+            .leftJoinAndSelect("picture.user", "user")
+            .select(["user.user_account",
+                "picture.token_id"
+            ])
+            .where(`picture.token_id= :token_id`)
+            .setParameters({
+                token_id
+            })
+
+        return await qb.getMany();
+    }
+
 }

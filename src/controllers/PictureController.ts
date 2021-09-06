@@ -461,6 +461,19 @@ export class PictureController {
   
           return ctx;
       }
+      
+    @HttpCode(200)
+    @Get("/userid")
+    async getUserId(@Param('token_id') token_id: string, @Res() { ctx }: Response) {
+
+        const pictures = await this.pictureRepo.getUserId(token_id);
+  
+        ctx.body = {
+            data: pictures
+        }
+  
+          return ctx;
+      }
 
 
 }

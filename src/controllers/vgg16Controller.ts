@@ -11,6 +11,7 @@ import { getCustomRepository } from "typeorm";
 import { OpenAPI, ResponseSchema } from "routing-controllers-openapi";
 import { Picture } from "../entities/Picture";
 import { BadRequestResponse, SuccessReponse } from "../types/swagger";
+import Jimp = require("jimp");
 
 @JsonController("/vgg16")
 export class Vgg16Controller{
@@ -39,7 +40,7 @@ export class Vgg16Controller{
         formData.append("file", buffer, {
             filename
         })
-        
+
        const response = await fetch(test_url, {
             method: "POST",
             body: formData,
