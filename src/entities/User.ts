@@ -1,5 +1,5 @@
 import { IsHash, IsInt, IsNumber, IsString } from 'class-validator';
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, Index } from 'typeorm';
 import { DataType } from '../types/database';
 import { History } from './History';
 import { Picture } from './Picture';
@@ -26,6 +26,7 @@ export class User {
     name: "user_id",
     length: 20,
   })
+  @Index({unique: true})
   @IsString()
   user_id: string;
 
