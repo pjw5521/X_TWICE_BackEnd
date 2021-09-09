@@ -48,7 +48,6 @@ export class UserController {
         }
         
         ctx.body = {
-            // status: HttpStatus.success,
             data: users
         }
 

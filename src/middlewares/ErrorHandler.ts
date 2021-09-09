@@ -43,7 +43,6 @@ export async function authorizationCheker (action: Action, roles: string[]) {
         }
 
         if (user && !roles.length) {
-            // console.log("true")
             return true;
         }
         // if (user && roles.find(role => user.roles.indexOf(role) !== -1)) return true;

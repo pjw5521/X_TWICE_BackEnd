@@ -55,8 +55,6 @@ export class Vgg16Controller{
         return ctx;
     }
 
-    // vector, norm 값 저장하기
-    // 유사도 검사 결과, vector, norm 값을 받음. vector와 norm db에 저장하기 
     @HttpCode(HttpStatus.success)
     @Post("/vector")
     @ResponseSchema(Picture, {

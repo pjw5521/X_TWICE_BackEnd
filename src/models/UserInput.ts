@@ -3,10 +3,6 @@ import { User } from "../entities/User";
 
 export class UserInsertInput implements Partial<User> {
 
-    /* @IsInt()
-    user_num: number;
-    ;  */
-
     @IsString()
     @Length(5, 20, { each: true })
     user_id: string; 

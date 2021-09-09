@@ -31,9 +31,7 @@ export class PictureInsertInput implements Partial<Picture> {
     @IsNumber()
     picture_norm: number;
 
-    user_num: number;
-    /* @IsHash("sha256")
-    user_password: string; */ 
+    user_num: number; 
 
 }
 
@@ -73,8 +71,6 @@ export class PictureUpdateInput implements Partial<Picture> {
     @IsOptional()
     @IsInt()
     user_num?: number;
-    /* @IsHash("sha256")
-    user_password: string; */ 
 
 }
 
