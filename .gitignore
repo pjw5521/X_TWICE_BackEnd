@@ -8,3 +8,4 @@ build/
 node_modules/
 tmp/
 temp/
+.DS_Store
