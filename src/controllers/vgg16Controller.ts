@@ -30,7 +30,7 @@ export class Vgg16Controller{
         description: "사진을 전송하면 유사도 검사 결과를 리턴",
     })
     async uploadFile(@UploadedFile("file") file: any, @Res() { ctx }: Response){
-        const test_url = "http://172.16.163.153:8000/predict"
+        const test_url = "http://sw.uos.ac.kr:8000/predict"
 
         console.log(file);
 
