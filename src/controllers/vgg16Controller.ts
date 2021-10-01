@@ -11,7 +11,6 @@ import { getCustomRepository } from "typeorm";
 import { OpenAPI, ResponseSchema } from "routing-controllers-openapi";
 import { Picture } from "../entities/Picture";
 import { BadRequestResponse, SuccessReponse } from "../types/swagger";
-import Jimp = require("jimp");
 
 @JsonController("/vgg16")
 export class Vgg16Controller{
@@ -30,7 +29,7 @@ export class Vgg16Controller{
         description: "사진을 전송하면 유사도 검사 결과를 리턴",
     })
     async uploadFile(@UploadedFile("file") file: any, @Res() { ctx }: Response){
-        const test_url = "http://sw.uos.ac.kr:8000/predict"
+        const test_url = "https://sw.uos.ac.kr/ai/predict"
 
         console.log(file);
 
