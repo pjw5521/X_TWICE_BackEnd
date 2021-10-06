@@ -51,7 +51,34 @@
    script : 실행시킬 파일 경로
    env : 배포 환경
    ```
-   
+
+### nginx 설정 
+1. `sudo apt-get install nginx` nginx 설치
+2. `sudo nano /etc/nginx/nginx.conf` nginx 설정 파일 오픈 
+3. 아래 내용 추가   
+    '''
+    server{ 
+        listen 443 ssl default_server; 
+        listen [::]:443 ssl default_server; // 443 : Https default server 
+    
+        index index.html index.htm index.nginx-debian.html 
+        server_name sw.uos.ac.kr; // server 이름 
+        ssl_certificate /etc/letsencrypt/live/sw.uos.ac.kr/fullchain.pem; // https ssl 인증서 공개키 
+        ssl_certificate_key /etc/letsencrypt/live/sw.uos.ac.kr/privkey.pem; // https ssl 인증서 비밀키
+        location / {
+            proxy_pass http://172.16.163.74:4004; // 4004 rontend 포트 번호 
+        }
+
+        location /backend/ {
+            proxy_pass http://172.16.163.74:4000/; // 4000 rontend 포트 번호 
+        }
+
+        location /ai/ {
+            proxy_pass http://172.16.163.74:8000/; // 8000 rontend 포트 번호
+        }
+    }   
+    ```
+
 <br>
 <hr>
 <br>
