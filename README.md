@@ -66,15 +66,15 @@
         ssl_certificate /etc/letsencrypt/live/sw.uos.ac.kr/fullchain.pem; // https ssl 인증서 공개키 
         ssl_certificate_key /etc/letsencrypt/live/sw.uos.ac.kr/privkey.pem; // https ssl 인증서 비밀키
         location / {
-            proxy_pass http://172.16.163.74:4004; // 4004 rontend 포트 번호 
+            proxy_pass http://172.16.163.74:4004; // 4004 Frontend 포트 번호 
         }
 
         location /backend/ {
-            proxy_pass http://172.16.163.74:4000/; // 4000 rontend 포트 번호 
+            proxy_pass http://172.16.163.74:4000/; // 4000 Backend 포트 번호 
         }
 
         location /ai/ {
-            proxy_pass http://172.16.163.74:8000/; // 8000 rontend 포트 번호
+            proxy_pass http://172.16.163.74:8000/; // 8000 AI 포트 번호
         }
     }   
     ```
