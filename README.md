@@ -56,7 +56,7 @@
 1. `sudo apt-get install nginx` nginx 설치
 2. `sudo nano /etc/nginx/nginx.conf` nginx 설정 파일 오픈 
 3. 아래 내용 추가   
-    '''
+    ```
     server{ 
         listen 443 ssl default_server; 
         listen [::]:443 ssl default_server; // 443 : Https default server 
